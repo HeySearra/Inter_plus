@@ -1,0 +1,13 @@
+.DS_Store
+inter_plus/node_modules/
+
+inter_plus/dist/
+
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
