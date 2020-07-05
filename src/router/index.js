@@ -48,25 +48,61 @@ const routes = [
     path:'/uploadVideo',
     name:'uploadVideo',
     component: ()=>
-        import('../views/uploadVideo')
+        import('../views/manages/uploadVideo')
   },
   {
     path:'/uploadExe',
     name:'uploadExe',
     component: ()=>
-        import('../views/uploadExe')
+        import('../views/manages/uploadExe')
   },
   {
     path:'/manageVideo',
     name:'manageVideo',
     component: ()=>
-        import('../views/manageVideo')
+        import('../views/manages/manageVideo')
   },
   {
     path:'/manageExe',
     name:'manageExe',
     component: ()=>
-        import('../views/manageExe')
+        import('../views/manages/manageExe')
+  },
+  {
+    path:'/uploadPrepare',
+    name:'uploadPrepare',
+    component: ()=>
+        import('../views/manages/uploadPrepare')
+  },
+  {
+    path:'/adminPrepare',
+    name:'adminPrepare',
+    component: ()=>
+        import('../views/admin/adminPrepare')
+  },
+  {
+    path:'/adminVideo',
+    name:'adminVideo',
+    component: ()=>
+        import('../views/admin/adminVideo')
+  },
+  {
+    path:'/adminExe',
+    name:'adminExe',
+    component: ()=>
+        import('../views/admin/adminExe')
+  },
+  {
+    path:'/adminManageVideo',
+    name:'adminManageVideo',
+    component: ()=>
+        import('../views/admin/adminManageVideo')
+  },
+  {
+    path:'/adminManageExe',
+    name:'adminManageExe',
+    component: ()=>
+        import('../views/admin/adminManageExe')
   },
 ];
 
