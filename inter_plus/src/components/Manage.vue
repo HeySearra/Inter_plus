@@ -1,5 +1,5 @@
 <template>
-  <div class="Manage">
+  <div class="manage">
     <el-menu
       :default-active="activeIndex"
       class="el-menu-vertical-demo"
@@ -9,7 +9,11 @@
       router
       active-text-color="#ffd04b">
       <el-menu-item-group>
-        <template slot="title"><span style="margin-right: 15px; font-size: larger">教师</span></template>
+        <el-menu-item index="/edit_user_info">
+          <span slot="title">修改个人信息</span>
+        </el-menu-item>
+      </el-menu-item-group>
+      <el-menu-item-group v-if="identity=='teacher'">
         <el-menu-item index="/uploadPrepare">
           <span slot="title">提交备课申请</span>
         </el-menu-item>
@@ -26,8 +30,7 @@
           <span slot="title">管理我的习题</span>
         </el-menu-item>
       </el-menu-item-group>
-      <el-menu-item-group>
-        <template slot="title"><span style="margin-right: 15px; font-size: larger">管理员</span></template>
+      <el-menu-item-group v-if="identity=='manager'">
         <el-menu-item index="/adminPrepare">
           <span slot="title">审核备课文件</span>
         </el-menu-item>
@@ -51,10 +54,11 @@
 <script>
 /* eslint-disable */
   export default {
-    name: "Manage",
+    name: "manage",
     data(){
       return{
         activeIndex: this.$route.path,
+        identity: 'teacher',
       }
     },
     methods: {
@@ -67,6 +71,9 @@
 </script>
 
 <style scoped>
+.el-menu-item-group{
+
+}
   .el-menu{
     width: 150px;
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="4"><Manage></Manage></el-col>
+      <el-col :span="4"><manage></manage></el-col>
       <el-col :span="20">
         <h3>This is check prepare files page.</h3>
       </el-col>
@@ -10,12 +10,8 @@
 </template>
 
 <script>
-  import Manage from "../../components/Manage";
   export default {
     name: "adminPrepare",
-    components:{
-      Manage
-    }
   }
 </script>
 

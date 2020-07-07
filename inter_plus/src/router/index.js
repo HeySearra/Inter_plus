@@ -44,7 +44,7 @@ const router = new Router({
     path:'/manage',
     name:'manage',
     component: () =>
-        import('../components/Manage.vue')
+        import('../components/manage.vue')
   },
   {
     path:'/uploadVideo',

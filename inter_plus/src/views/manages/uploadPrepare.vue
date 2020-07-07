@@ -1,7 +1,7 @@
 <template>
   <div class="uploadPrepare">
     <el-row>
-      <el-col :span="4"><Manage></Manage></el-col>
+      <el-col :span="4"><manage></manage></el-col>
       <el-col :span="20">
         <el-main style="margin-top: 60px; margin-left:60px; margin-right: 160px;">
           <el-form ref="form" :model="form" label-width="100px" :rules="rules">
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-  import Manage from "../../components/Manage";
   export default {
     name: "uploadPrepare",
     data(){
@@ -95,9 +94,6 @@
         this.$refs.form.resetFields();
       }
     },
-    components: {
-      Manage,
-    }
   }
 </script>
 

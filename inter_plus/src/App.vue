@@ -11,13 +11,8 @@
 </template>
 
 <script>
-import NavBar from './components/header.vue';
-import cib from './components/course_intro_block.vue';
 export default {
   name: 'app',
-  components: {
-    NavBar, cib
-  },
   data () {
     return {
     }

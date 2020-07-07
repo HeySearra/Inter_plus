@@ -26,13 +26,8 @@
 </template>
 
 <script>
-import NavBar from '../components/header';
-import cib from '../components/course_intro_block';
 export default {
   name: 'course_info',
-  components: {
-    NavBar, cib
-  },
   data () {
     return {
     }

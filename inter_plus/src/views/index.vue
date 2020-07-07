@@ -5,22 +5,15 @@
       <lb :title="'学科分类'" type="subject"></lb>
     </el-aside>
     <el-main>
-    <!-- <swiper :options="swiperOption">
-      <swiper-slide class="swiper-slide" v-for="(item,index) in slide" :key="index">
-          我是第{{item}}个轮播图
-      </swiper-slide>
-      <div class="swiper-pagination" slot="pagination"></div>
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div>
-    </swiper> -->
-    <swiper v-if="slide.length > 1" ref="mySwiper" :options="swiperOption" class="swiper-box">
+      <class-carousel></class-carousel>
+    <!-- <swiper v-if="slide.length > 1" ref="mySwiper" :options="swiperOption" class="swiper-box">
       <swiper-slide class="swiper-slide" v-for="(item,index) in slide" :key="index">
           我是第{{item}}个轮播图
       </swiper-slide>
       <div class="swiper-pagination" slot="pagination"></div>
       <div @click="prev" class="swiper-button-prev" slot="button-prev"></div>
       <div @click="next" class="swiper-button-next" slot="button-next"></div>
-    </swiper>
+    </swiper> -->
     </el-main>
     <el-aside width="300px">
       <lb :title="'我的课程'" type="course"></lb>
@@ -35,16 +28,11 @@
 </template>
 
 <script>
-import NavBar from '../components/header.vue';
-import cib from '../components/course_intro_block.vue';
-import lb from '../components/list_block';
-import 'swiper/swiper-bundle.css'
-import Swiper from 'swiper'
 var vm = null;
 export default {
   name: 'index',
   components: {
-    NavBar, cib, lb
+    cib, lb, classCarousel, classCardSp
   },
   created () {
     vm = this

@@ -19,8 +19,6 @@
 
 <script>
   //课程日期和参加人数不见了，html调试element当中没有找到。
-  import classCarousel from "../components/classCarousel";//首页的走马灯，可以删除，可以替换成大图片
-  import classCardSp from "../components/classCardSp";
   export default {
     name: "allClass",
     data(){
@@ -39,10 +37,6 @@
         ]
       }
     },
-    components:{
-      classCarousel,
-      classCardSp
-    }
   }
 </script>
 
