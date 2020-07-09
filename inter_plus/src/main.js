@@ -4,11 +4,13 @@ import router from './router'
 import Element from 'element-ui'
 import vueSwiper from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
+import mavonEditor from 'mavon-editor'
+import VueVideoPlayer from 'vue-video-player'
 
 import NavBar from './components/header.vue'
 import cib from './components/course_intro_block.vue'
-import classCarousel from './components/classCarousel';//首页的走马灯，可以删除，可以替换成大图片
-import classCardSp from './components/classCardSp';
+import classCarousel from './components/classCarousel'
+import classCardSp from './components/classCardSp'
 import manage from "./components/manage.vue"
 import lb from './components/list_block'
 
@@ -23,6 +25,8 @@ Vue.config.productionTip = false
 
 Vue.use(Element);
 Vue.use(vueSwiper);
+Vue.use(mavonEditor);
+Vue.use(VueVideoPlayer);
 
 new Vue({
   router,

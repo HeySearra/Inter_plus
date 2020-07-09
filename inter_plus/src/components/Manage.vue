@@ -12,6 +12,12 @@
         <el-menu-item index="/edit_user_info">
           <span slot="title">修改个人信息</span>
         </el-menu-item>
+        <el-menu-item index="/edit_user_info">
+          <span slot="title">修改帐号密码</span>
+        </el-menu-item>
+        <el-menu-item index="/edit_user_info">
+          <span slot="title">已购买的课程</span>
+        </el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group v-if="identity=='teacher'">
         <el-menu-item index="/uploadPrepare">
@@ -24,10 +30,10 @@
           <span slot="title">上传作业习题</span>
         </el-menu-item>
         <el-menu-item index="/manageVideo">
-          <span slot="title">管理我的视频</span>
+          <span slot="title">已上传的视频</span>
         </el-menu-item>
         <el-menu-item index="/manageExe">
-          <span slot="title">管理我的习题</span>
+          <span slot="title">已上传的习题</span>
         </el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group v-if="identity=='manager'">
@@ -71,9 +77,9 @@
 </script>
 
 <style scoped>
-.el-menu-item-group{
-
-}
+  .el-menu-item-group>>>.el-menu-item-group__title{
+    padding: 0 !important;
+  }
   .el-menu{
     width: 150px;
   }

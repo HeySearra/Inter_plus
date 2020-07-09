@@ -31,9 +31,6 @@
 var vm = null;
 export default {
   name: 'index',
-  components: {
-    cib, lb, classCarousel, classCardSp
-  },
   created () {
     vm = this
   },

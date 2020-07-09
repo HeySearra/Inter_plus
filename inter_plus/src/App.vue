@@ -26,6 +26,22 @@ export default {
     padding:0, 0;
     min-width:1000px;
   }
+  
+  .el-header {
+      color: #333;
+      text-align: center;
+      line-height: 60px;
+      padding:0 !important;
+      overflow: hidden;
+      width:100vw;
+      z-index: 2000;
+  }
+
+  .el-footer{
+      height:50px;
+      width:100%;
+      text-align: center;
+  }
 
   body{
     background-color: #f6f6f6;

@@ -4,13 +4,13 @@
     <class-carousel></class-carousel>
     <el-container direction="horizontal">
       <el-main>
-        课程列表
+        <h3>课程列表</h3>
         <div v-for="item in 7" :key="item" style="margin-bottom: 10px;">
           <class-card-sp :class-card="classCard"></class-card-sp>
         </div>
       </el-main>
       <el-aside>
-        课程分类
+        <h3>课程分类</h3>
         <div v-for="(item, index) in classCategory" :key="index">{{item}}</div>
       </el-aside>
     </el-container>
@@ -42,25 +42,27 @@
 
 <style scoped>
   .el-aside {
-    background-color: whitesmoke;
+    background-color: white;
     color: #333333;
     border: 1px solid #c0c8be;
     border-radius: 14px;
     text-align: center;
     line-height: 50px;
     margin-right: 100px;
-    margin-left: 50px;
-    margin-top: 60px;
+    margin-left: 40px;
+    margin-top: 40px;
+    padding: 0;
   }
 
   .el-main {
-    background-color: whitesmoke;
+    background-color: white;
     color: #333;
     border: 1px solid #c0c8be;
     border-radius: 14px;
     text-align: center;
     line-height: 50px;
     margin-left: 100px;
-    margin-top: 60px;
+    margin-top: 40px;
+    padding: 0;
   }
 </style>
