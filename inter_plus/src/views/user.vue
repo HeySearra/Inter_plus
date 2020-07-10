@@ -1,6 +1,20 @@
 <template>
   <div>
-    <h1>个人信息介绍</h1>
+      <el-row style="margin-top: 70px;position:relative;height:200px;background:#409eff">
+        	<el-col :span="17">    	
+				<div id="info">
+						<div style="width: 25% ;height:80%;">
+							<div  style="position:absolute;left:10%;top:70px;width: 100px;height:100px;border-radius:100px;-webkit-border-radius:100px; -moz-border-radius:100px;overflow: hidden" >
+							    <img src="C:\Users\鸡蛋酱\IdeaProjects\untitled\myweb\src\jpg\book2.jpg" alt="头像" style="width:100px;height: 100px; display: block; ; border-radius:100px;">
+							</div>
+						</div>
+						<div style="position:absolute;left:40%;top:20px;">
+							<h4 class="lead">{{ name }}</h4>
+						</div>
+				</div>
+			</el-col>
+		</el-row>
+<el-row>
 <el-row>
   <el-col :span="17">
         <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -50,7 +64,9 @@
           {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
           {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
           {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          ]
+          ],
+          jpg:"C:/Users/鸡蛋酱/IdeaProjects/untitled/myweb/src/jpg/book2.jpg",
+          name:"Gua"
       }
     }
   };

@@ -19,6 +19,15 @@
       <el-option label="研究生" value="研究生"></el-option>
     </el-select>
   </el-form-item>
+   <el-form-item label="身份证照片" prop="desc">
+     <el-link type="primary">上传身份证照片</el-link>
+  </el-form-item>
+  <el-form-item label="学信网照片" prop="desc">
+     <el-link type="primary">上传学信网照片</el-link>
+  </el-form-item>
+  <el-form-item label="教师资格证照片" prop="desc">
+     <el-link type="primary">上传身教师资格证照片</el-link>
+  </el-form-item>
   <el-form-item label="申请理由" prop="desc">
     <el-input type="textarea" v-model="ruleForm.desc"></el-input>
   </el-form-item>
