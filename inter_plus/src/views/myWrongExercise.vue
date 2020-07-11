@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row style="margin-top: 70px;position:relative;height:200px;background:#409eff">
+       <el-row style="margin-top: 70px;position:relative;height:200px;background:#409eff">
         	<el-col :span="17">    	
 				<div id="info">
 						<div style="width: 25% ;height:80%;">
@@ -14,7 +14,6 @@
 				</div>
 			</el-col>
 		</el-row>
-<el-row>
 <el-row>
   <el-col :span="15">
       <el-row><el-menu default-active="2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -137,7 +136,7 @@
         showone:false,
         showmore:false,
         showinput:false,
-        jpg:"C:/Users/鸡蛋酱/IdeaProjects/untitled/myweb/src/jpg/book2.jpg",
+          jpg:"C:/Users/鸡蛋酱/IdeaProjects/untitled/myweb/src/jpg/book2.jpg",
           name:"Gua"
       }
     },
