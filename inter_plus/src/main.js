@@ -5,6 +5,7 @@ import Element from 'element-ui'
 import vueSwiper from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import VueVideoPlayer from 'vue-video-player'
 
 import NavBar from './components/header.vue'
