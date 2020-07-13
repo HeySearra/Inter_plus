@@ -1,7 +1,6 @@
 .DS_Store
-inter_plus/node_modules/
-
-inter_plus/dist/
+inter_plus/node_modules
+inter_plus/dist
 
 
 # Editor directories and files

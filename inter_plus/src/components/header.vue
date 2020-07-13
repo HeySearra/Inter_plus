@@ -21,7 +21,7 @@
               <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>个人主页</el-dropdown-item>
                   <el-dropdown-item>管理</el-dropdown-item>
-                  <el-dropdown-item>消息</el-dropdown-item>
+                  <el-dropdown-item>错题集</el-dropdown-item>
                   <el-dropdown-item>设置</el-dropdown-item>
                   <el-dropdown-item>登出</el-dropdown-item>
               </el-dropdown-menu>

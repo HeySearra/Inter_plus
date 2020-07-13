@@ -39,72 +39,74 @@ const router = new Router({
     name:'exercise_info',
     component: () =>
         import("../views/exercise_info.vue")
-  },
+  }, 
   {
     path:'/manage',
     name:'manage',
     component: () =>
-        import('../components/manage.vue')
-  },
-  {
-    path:'/uploadVideo',
-    name:'uploadVideo',
-    component: ()=>
-        import('../views/manages/uploadVideo')
-  },
-  {
-    path:'/uploadExe',
-    name:'uploadExe',
-    component: ()=>
-        import('../views/manages/uploadExe')
-  },
-  {
-    path:'/manageVideo',
-    name:'manageVideo',
-    component: ()=>
-        import('../views/manages/manageVideo')
-  },
-  {
-    path:'/manageExe',
-    name:'manageExe',
-    component: ()=>
-        import('../views/manages/manageExe')
-  },
-  {
-    path:'/uploadPrepare',
-    name:'uploadPrepare',
-    component: ()=>
-        import('../views/manages/uploadPrepare')
-  },
-  {
-    path:'/adminPrepare',
-    name:'adminPrepare',
-    component: ()=>
-        import('../views/admin/adminPrepare')
-  },
-  {
-    path:'/adminVideo',
-    name:'adminVideo',
-    component: ()=>
-        import('../views/admin/adminVideo')
-  },
-  {
-    path:'/adminExe',
-    name:'adminExe',
-    component: ()=>
-        import('../views/admin/adminExe')
-  },
-  {
-    path:'/adminManageVideo',
-    name:'adminManageVideo',
-    component: ()=>
-        import('../views/admin/adminManageVideo')
-  },
-  {
-    path:'/adminManageExe',
-    name:'adminManageExe',
-    component: ()=>
-        import('../views/admin/adminManageExe')
+        import('../components/manage.vue'),
+    children: [
+      {
+        path:'/manage/uploadVideo',
+        name:'uploadVideo',
+        component: ()=>
+            import('../views/manages/uploadVideo')
+      },
+      {
+        path:'/manage/uploadExe',
+        name:'uploadExe',
+        component: ()=>
+            import('../views/manages/uploadExe')
+      },
+      {
+        path:'/manage/manageVideo',
+        name:'manageVideo',
+        component: ()=>
+            import('../views/manages/manageVideo')
+      },
+      {
+        path:'/manage/manageExe',
+        name:'manageExe',
+        component: ()=>
+            import('../views/manages/manageExe')
+      },
+      {
+        path:'/manage/uploadPrepare',
+        name:'uploadPrepare',
+        component: ()=>
+            import('../views/manages/uploadPrepare')
+      },
+      {
+        path:'/manage/adminPrepare',
+        name:'adminPrepare',
+        component: ()=>
+            import('../views/admin/adminPrepare')
+      },
+      {
+        path:'/manage/adminVideo',
+        name:'adminVideo',
+        component: ()=>
+            import('../views/admin/adminVideo')
+      },
+      {
+        path:'/manage/adminExe',
+        name:'adminExe',
+        component: ()=>
+            import('../views/admin/adminExe')
+      },
+      {
+        path:'/manage/adminManageVideo',
+        name:'adminManageVideo',
+        component: ()=>
+            import('../views/admin/adminManageVideo')
+      },
+      {
+        path:'/manage/adminManageExe',
+        name:'adminManageExe',
+        component: ()=>
+            import('../views/admin/adminManageExe')
+      },
+    ]
   },
   {
     path: "/exercise",
