@@ -38,32 +38,6 @@ data() {
     return {
       slide: [1, 2, 3, 4, 5],
       //设置属性
-      swiperOption: {
-        //显示分页
-        pagination: {
-          el: '.swiper-pagination',
-          type: 'bullets',
-          clickable: true,
-        },
-        //设置点击箭头
-        navigation: {
-          nextEl: '.swiper-button-next', 
-          prevEl: '.swiper-button-prev',
-        },
-        //自动轮播
-        autoplay: {
-          delay: 2000,
-        },
-        //开启鼠标滚轮控制Swiper切换
-        mousewheel: {
-          invert: true,
-        },
-      }
-    }
-  },
-  computed: {
-    swiper() {
-      return this.$refs.mySwiper.$swiper
     }
   },
   mounted() {

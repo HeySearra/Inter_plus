@@ -2,11 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import Element from 'element-ui'
-import vueSwiper from 'vue-awesome-swiper'
-import 'swiper/swiper-bundle.css'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import VueVideoPlayer from 'vue-video-player'
+import 'vue-video-player/src/custom-theme.css'
 
 import NavBar from './components/header.vue'
 import cib from './components/course_intro_block.vue'
@@ -25,7 +24,6 @@ Vue.component('lb', lb)
 Vue.config.productionTip = false
 
 Vue.use(Element);
-Vue.use(vueSwiper);
 Vue.use(mavonEditor);
 Vue.use(VueVideoPlayer);
 
