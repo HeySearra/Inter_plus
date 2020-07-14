@@ -1,36 +1,33 @@
 <template>
   <div class="uploadPrepare">
     <el-row>
-      <el-col :span="4"><manage></manage></el-col>
-      <el-col :span="20">
-        <el-main style="margin-top: 60px; margin-left:60px; margin-right: 160px;">
-          <el-form ref="form" :model="form" label-width="100px" :rules="rules">
-            <el-form-item label="课程名称：" prop="className">
-              <el-input v-model="form.className"></el-input>
-            </el-form-item>
-            <el-form-item label="课程简介：" prop="classIntro">
-              <el-input type="textarea" v-model="form.classIntro"></el-input>
-            </el-form-item>
-            <el-form-item label="备课文件：" prop="files">
-              <el-upload
-                class="upload-demo"
-                drag
-                ref="upload"
-                :http-request="uploadFiles"
-                :on-change="changeFiles"
-                action="https://jsonplaceholder.typicode.com/posts/">
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                <div class="el-upload__tip" slot="tip">上传备课文件，审核成功后才可上传课程视频</div>
-              </el-upload>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">立即创建</el-button>
-              <el-button @click="resetForm">取消</el-button>
-            </el-form-item>
-          </el-form>
-        </el-main>
-      </el-col>
+      <el-main style="margin-top: 60px; margin-left:60px; margin-right: 160px;">
+        <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+          <el-form-item label="课程名称：" prop="className">
+            <el-input v-model="form.className"></el-input>
+          </el-form-item>
+          <el-form-item label="课程简介：" prop="classIntro">
+            <el-input type="textarea" v-model="form.classIntro"></el-input>
+          </el-form-item>
+          <el-form-item label="备课文件：" prop="files">
+            <el-upload
+              class="upload-demo"
+              drag
+              ref="upload"
+              :http-request="uploadFiles"
+              :on-change="changeFiles"
+              action="https://jsonplaceholder.typicode.com/posts/">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-upload__tip" slot="tip">上传备课文件，审核成功后才可上传课程视频</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">立即创建</el-button>
+            <el-button @click="resetForm">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-main>
     </el-row>
   </div>
 </template>

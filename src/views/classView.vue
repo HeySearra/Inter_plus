@@ -37,7 +37,7 @@
         </el-main>
       </el-container>
       <div class="easide">
-        <el-aside style="min-width:530px; height: 700px;">
+        <el-aside style="min-width:530px; height: 700px; padding: 0;">
           <div>
           {{classInfo.className}}课笔记本
           <mavon-editor
@@ -151,8 +151,10 @@
     margin-left: 40px;
     margin-top: 20px;
     margin-right: 20px;
-    max-height: 500px;
+    max-height: 600px;
     padding: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   .el-input__inner{

@@ -1,14 +1,20 @@
 <template>
-  <div class="classCardSp"  @click="toVideo(classCard.classId)">
+  <div class="classCardSp"  >
     <el-card :body-style="{ padding: '0px' }" shadow="hover">
       <el-container>
         <el-image :src="classCard.classIcon" :fit="'scale-down'" style="width: 250px; padding: 2px;"></el-image>
           <el-container direction="vertical">
             <div style="padding: 5px 5px 0px 5px; text-align: left; line-height: 25px;">
               <el-container direction="vertical">
-                <div style="font-size: larger">{{classCard.className}}</div>
-                <div style="font-size: 15px; color: grey">{{classCard.teacherName}}</div>
-                <div class="Intro">{{classCard.classIntro}}</div>
+                <div><el-button type="text" @click="toVideo" style="font-size: larger">
+                  {{classCard.className}}</el-button>
+                </div>
+                <div><el-button type="text" style="font-size: 15px; color: grey" @click="toTeacher">
+                  {{classCard.teacherName}}</el-button>
+                </div>
+                <div class="Intro">
+                  <el-button type="text" @click="toVideo">{{classCard.classIntro}}</el-button>
+                </div>
               </el-container>
             </div>
             <div style="padding: 0px 5px 5px 5px; line-height: 25px; position: relative; text-align: left">
@@ -47,6 +53,9 @@
     methods:{
       toVideo(){
         this.$router.push({name: 'classView', params:{classId: this.classCard.classId}})
+      },
+      toTeacher(){
+        this.$router.push({name: 'User'})
       }
     },
   }
@@ -56,5 +65,10 @@
   div.Intro{
     width: 100%;
     height: 85px;
+  }
+
+  .el-button{
+    color: black;
+    padding: 0px;
   }
 </style>

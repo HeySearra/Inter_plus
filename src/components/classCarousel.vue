@@ -2,15 +2,21 @@
   <div class="classCarousel">
     <el-carousel trigger="click">
       <el-carousel-item v-for="item in 4" :key="item">
-        <h3 class="small">精品课展示，与主页的相同，或者可以去掉</h3>
+        <el-button type="text" @click="toClass(item)"><h3 class="small">精品课展示，与主页的相同，或者可以去掉</h3></el-button>
       </el-carousel-item>
     </el-carousel>
   </div>
 </template>
 
 <script>
+
   export default {
-    name: "classCarousel"
+    name: "classCarousel",
+    methods:{
+      toClass(){
+        this.$router.push({name:'classView', params:{classId:1}})
+      }
+    }
   }
 </script>
 
@@ -26,6 +32,7 @@
   .el-carousel__item:nth-child(n) {
     background-color: #c0c8be;
     height: 350px;
+    text-align: center;
   }
 
   .el-carousel{

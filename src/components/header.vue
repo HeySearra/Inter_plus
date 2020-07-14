@@ -13,24 +13,27 @@
       <el-menu-item index="/">主页</el-menu-item>
       <el-menu-item index="allClass">课程</el-menu-item>
       <el-menu-item index="3">作业</el-menu-item>
-      <el-menu-item index="/manage">视频管理</el-menu-item>
+      <el-menu-item index="/manage/uploadVideo">视频管理</el-menu-item>
       <div class="user">
-          <el-submenu>
-              <el-menu-item index="/user">个人主页</el-menu-item>
-              <el-menu-item>管理</el-menu-item>
-              <el-menu-item>错题集</el-menu-item>
-              <el-menu-item>设置</el-menu-item>
-              <el-menu-item>登出</el-menu-item>
-          </el-submenu>
-          <el-dropdown @click.native="dialogVisible = true">
+<!--          <el-submenu>-->
+<!--              <template slot="title">-->
+<!--                  <el-avatar icon="el-icon-user-solid" @click="toUser"></el-avatar>-->
+<!--              </template>-->
+<!--              <el-menu-item index="/user">个人主页</el-menu-item>-->
+<!--&lt;!&ndash;              <el-menu-item index="/user/edit">管理</el-menu-item>&ndash;&gt;-->
+<!--              <el-menu-item index="/user/wrongExercise">错题集</el-menu-item>-->
+<!--              <el-menu-item index="/user/edit">设置</el-menu-item>-->
+<!--              <el-menu-item >登出</el-menu-item>-->
+<!--          </el-submenu>-->
+          <el-dropdown @click.native="dialogVisible = true" @command="handleCommand">
               <span class="el-dropdown-link">
                   <el-avatar icon="el-icon-user-solid"></el-avatar>
               </span>
               <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>个人主页</el-dropdown-item>
-                  <el-dropdown-item>管理</el-dropdown-item>
-                  <el-dropdown-item>错题集</el-dropdown-item>
-                  <el-dropdown-item>设置</el-dropdown-item>
+                  <el-dropdown-item command="User">个人主页</el-dropdown-item>
+<!--                  <el-dropdown-item>管理</el-dropdown-item>-->
+                  <el-dropdown-item command="WrongExercise">错题集</el-dropdown-item>
+                  <el-dropdown-item command="Edit">设置</el-dropdown-item>
                   <el-dropdown-item>登出</el-dropdown-item>
               </el-dropdown-menu>
               </el-dropdown>
@@ -53,13 +56,17 @@
     data() {
       return {
         search: '',
-        active_index: '1'
+        active_index: this.$route.path
       };
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
-      }
+      },
+      handleCommand(command){
+        this.$message('click on item ' + command)
+        this.$router.push({name: command})
+      },
     }
   }
 </script>
@@ -96,7 +103,7 @@ h1{
 }
 
 .user{
-    float:right;
+    float: right;
     margin: 10px 35px 10px 20px;
     height:40px;
     overflow: hidden;

@@ -1,33 +1,33 @@
 <template>
   <div>
     <el-row style="margin-top: 70px;position:relative;height:200px;background:#409eff">
-        	<el-col :span="17">    	
+      <el-col :span="17">
 				<div id="info">
-						<div style="width: 25% ;height:80%;">
-							<div  style="position:absolute;left:10%;top:70px;width: 100px;height:100px;border-radius:100px;-webkit-border-radius:100px; -moz-border-radius:100px;overflow: hidden" >
-							    <img src="C:\Users\鸡蛋酱\IdeaProjects\untitled\myweb\src\jpg\book2.jpg" alt="头像" style="width:100px;height: 100px; display: block; ; border-radius:100px;">
-							</div>
-						</div>
-						<div style="position:absolute;left:40%;top:20px;">
-							<h4 class="lead">{{ name }}</h4>
-						</div>
+            <div style="width: 25% ;height:80%;">
+              <div  style="position:absolute;left:10%;top:70px;width: 100px;height:100px;border-radius:100px;-webkit-border-radius:100px; -moz-border-radius:100px;overflow: hidden" >
+                  <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="头像" style="width:100px;height: 100px; display: block; ; border-radius:100px;">
+              </div>
+            </div>
+            <div style="position:absolute;left:40%;top:20px;">
+              <h4 class="lead">{{ name }}</h4>
+            </div>
 				</div>
 			</el-col>
 		</el-row>
-<el-row>
-  <el-col :span="17">
-        <el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-  <el-menu-item index="1"><a href="http://localhost:8080/user" target="_blank">我的课程</a></el-menu-item>
-  <el-menu-item index="2"><a href="http://localhost:8080/user/WrongExercise" target="_blank">我的错题本</a></el-menu-item>
- </el-menu>
+    <el-row>
+      <el-col :span="17">
+        <el-menu default-active="/user" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>
+          <el-menu-item index="/user">我的课程</el-menu-item>
+          <el-menu-item index="/user/wrongExercise">我的错题本</el-menu-item>
+         </el-menu>
       <el-row :gutter="20" >
- <el-col :span="4" v-for="(o, index) in myclass" :key="o" :offset="index > 0 ? 0 : 0">
-    <el-card :body-style="{ padding:'10px'}">
-      <a :href="o.href"><img :src="o.jpg" class="image"></a>
+      <el-col :span="4" v-for="(item, index) in myClass" :key="index" :offset="index > 0 ? 0 : 0">
+    <el-card :body-style="{ padding:'10px'}" style="margin-top: 10px;" shadow="hover">
+      <el-button @click="toClass(item)" style="padding: 0; line-height: 0;"><el-image :src="item.jpg" :fit="'scale-down'" @click="toClass(item)"></el-image></el-button>
       <div style="padding: 14px;">
-        <a :href="o.href" style="color:black">{{o.name}}</a>
+        <el-link style="color:black; font-size: larger">{{item.name}}</el-link><!--最好改成router跳转，传参-->
         <div class="bottom clearfix">
-          <time class="time">于{{ o.date }} 加入学习</time>
+          <time class="time">于{{ item.date }} 加入学习</time>
         </div>
       </div>
     </el-card>
@@ -37,7 +37,7 @@
   <el-col :span="6">
     <el-card class="box-card" shadow="hover"> 
   <div class="text item">
-     <el-button type="primary" plain>修改个人信息</el-button>
+     <el-button type="primary" plain @click="toEdit">修改个人信息</el-button>
      <p>观看了N个视频</p>
      <p>已经收集了N个错题</p>
   </div>
@@ -54,23 +54,36 @@
 
     data() {
       return {
-          myclass:[
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},{jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"",name:"课程名称",href:"",date:"2020/7/2"},
-          ],
-          jpg:"C:/Users/鸡蛋酱/IdeaProjects/untitled/myweb/src/jpg/book2.jpg",
-          name:"Gua"
+        myClass:[
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",classId:1,date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",classId:'1',date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
+          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
+        ],
+        jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+        name:"Gua"
+      }
+    },
+    methods:{
+      toClass(item){
+        this.$router.push({name:'classView', params:{classId:item.classId}})
+      },
+      handleSelect(key, keyPath) {
+          console.log(key,keyPath)
+        this.active=key;
+      },
+      toEdit(){
+        this.$router.push({name: 'Edit'})
       }
     }
   };
 </script>
-<style>
+<style scoped>
   .el-header {
     background-color: #B3C0D1;
     color: #333;

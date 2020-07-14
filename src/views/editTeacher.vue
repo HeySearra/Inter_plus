@@ -4,10 +4,10 @@
   <el-col :span="14">
     <el-container>
   <el-header>
-    <el-menu default-active="3" class="el-menu-demo" mode="horizontal" >
-  <el-menu-item index="1">资料设置</el-menu-item>
-   <el-menu-item index="2">账号设置</el-menu-item>
-    <el-menu-item index="3">申请成为老师</el-menu-item>
+    <el-menu default-active="/user/editTeacher" class="el-menu-demo" mode="horizontal" router>
+  <el-menu-item index="/user/edit">资料设置</el-menu-item>
+   <el-menu-item index="/user/editAccount">账号设置</el-menu-item>
+    <el-menu-item index="/user/editTeacher">申请成为老师</el-menu-item>
 </el-menu>
   </el-header>
   <el-main>

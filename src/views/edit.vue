@@ -1,59 +1,58 @@
 <template>
   <el-row>
-  <el-col :span="5"><div class="grid-content"></div></el-col>
-  <el-col :span="14">
-    <el-container>
-  <el-header>
-    <el-menu default-active="1" class="el-menu-demo" mode="horizontal" >
-  <el-menu-item index="1">资料设置</el-menu-item>
-   <el-menu-item index="2">账号设置</el-menu-item>
-    <el-menu-item index="3">申请成为老师</el-menu-item>
-</el-menu>
-  </el-header>
-  <el-main>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="头像" prop="jpg">
-    <el-avatar size="large" :src="ruleForm.circleUrl"></el-avatar>
-  </el-form-item>
-  <el-form-item label="昵称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
-  </el-form-item>
-  <el-form-item label="真实姓名" prop="trueName">
-    <el-input v-model="ruleForm.trueName"></el-input>
-  </el-form-item>
-  <el-form-item label="性别" prop="sex">
-    <el-radio-group v-model="ruleForm.sex">
-      <el-radio label="男"></el-radio>
-      <el-radio label="女"></el-radio>
-      <el-radio label="其他"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item label="生日">
-    <el-col :span="11">
-      <el-form-item prop="date1">
-        <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-      </el-form-item>
-    </el-col>
-  </el-form-item>
-  <el-form-item label="身份类型" prop="title">
-    <el-radio-group v-model="ruleForm.title">
-      <el-radio label="学生"></el-radio>
-      <el-radio label="在职"></el-radio>
-      <el-radio label="其他"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <el-form-item label="个人简介" prop="desc">
-    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">保存个人信息</el-button>
-    <el-button @click="resetForm('ruleForm')">恢复个人信息</el-button>
-  </el-form-item>
-</el-form>
-  </el-main>
-  <el-footer>Footer</el-footer>
-</el-container>
-    
+    <el-col :span="5"><div class="grid-content"></div></el-col>
+    <el-col :span="14">
+      <el-container>
+      <el-header>
+        <el-menu default-active="/user/edit" class="el-menu-demo" mode="horizontal" router>
+          <el-menu-item index="/user/edit">资料设置</el-menu-item>
+          <el-menu-item index="/user/editAccount">账号设置</el-menu-item>
+          <el-menu-item index="/user/editTeacher">申请成为老师</el-menu-item>
+        </el-menu>
+      </el-header>
+      <el-main>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="头像" prop="jpg">
+            <el-avatar size="large" :src="ruleForm.circleUrl"></el-avatar>
+          </el-form-item>
+          <el-form-item label="昵称" prop="name">
+            <el-input v-model="ruleForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="真实姓名" prop="trueName">
+            <el-input v-model="ruleForm.trueName"></el-input>
+          </el-form-item>
+          <el-form-item label="性别" prop="sex">
+            <el-radio-group v-model="ruleForm.sex">
+              <el-radio label="男"></el-radio>
+              <el-radio label="女"></el-radio>
+              <el-radio label="其他"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="生日">
+            <el-col :span="11">
+              <el-form-item prop="date1">
+                <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="身份类型" prop="title">
+            <el-radio-group v-model="ruleForm.title">
+              <el-radio label="学生"></el-radio>
+              <el-radio label="在职"></el-radio>
+              <el-radio label="其他"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="个人简介" prop="desc">
+            <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('ruleForm')">保存个人信息</el-button>
+            <el-button @click="resetForm('ruleForm')">恢复个人信息</el-button>
+          </el-form-item>
+        </el-form>
+      </el-main>
+      <el-footer>Footer</el-footer>
+    </el-container>
   </el-col>
 </el-row>
 </template>

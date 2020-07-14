@@ -5,7 +5,7 @@
 				<div id="info">
 						<div style="width: 25% ;height:80%;">
 							<div  style="position:absolute;left:10%;top:70px;width: 100px;height:100px;border-radius:100px;-webkit-border-radius:100px; -moz-border-radius:100px;overflow: hidden" >
-							    <img src="C:\Users\鸡蛋酱\IdeaProjects\untitled\myweb\src\jpg\book2.jpg" alt="头像" style="width:100px;height: 100px; display: block; ; border-radius:100px;">
+							    <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="头像" style="width:100px;height: 100px; display: block; ; border-radius:100px;">
 							</div>
 						</div>
 						<div style="position:absolute;left:40%;top:20px;">
@@ -16,9 +16,9 @@
 		</el-row>
 <el-row>
   <el-col :span="15">
-      <el-row><el-menu default-active="2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-  <el-menu-item index="1"><a href="http://localhost:8080/user" target="_blank">我的课程</a></el-menu-item>
-  <el-menu-item index="2"><a href="http://localhost:8080/user/WrongExercise" target="_blank">我的错题本</a></el-menu-item>
+      <el-row><el-menu default-active="/user/wrongExercise" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>
+  <el-menu-item index="/user">我的课程</el-menu-item>
+  <el-menu-item index="/user/wrongExercise">我的错题本</el-menu-item>
  </el-menu>
  </el-row>
 <el-row class="tac">
@@ -101,7 +101,7 @@
   <el-col :span="6">
     <el-card class="box-card" shadow="hover"> 
   <div class="text item">
-       <el-button type="primary" plain>修改个人信息</el-button>
+       <el-button type="primary" plain @click="toEdit">修改个人信息</el-button>
      <p>观看了N个视频</p>
      <p>已经收集了N个错题</p>
   </div>
@@ -147,11 +147,14 @@
       handleSelect(key, keyPath) {
           console.log(key,keyPath)
         this.active=key;
+      },
+      toEdit(){
+        this.$router.push({name: 'Edit'})
       }
     }
   };
 </script>
-<style>
+<style scoped>
  .el-dropdown-link {
     cursor: pointer;
     color: #409EFF;

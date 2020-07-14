@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import hello from '../components/HelloWorld.vue'
-import index from '@/views/index.vue'
-import course_info from '@/views/course_info.vue'
-import note_edit from '@/views/note_edit.vue'
+import index from '../views/index.vue'
+import course_info from '../views/course_info.vue'
+import note_edit from '../views/note_edit.vue'
 
 Vue.use(Router);
 
@@ -36,9 +36,9 @@ const router = new Router({
   },
   {
     path:'/exercise/:classId/:level',
-    name:'exercise_info',
+    name:'exercise',
     component: () =>
-        import("../views/exercise_info.vue")
+        import("../views/exercise.vue")
   }, 
   {
     path:'/manage',
@@ -47,82 +47,82 @@ const router = new Router({
         import('../components/manage.vue'),
     children: [
       {
-        path:'/manage/uploadVideo',
+        path:'uploadVideo',
         name:'uploadVideo',
         component: ()=>
             import('../views/manages/uploadVideo')
       },
       {
-        path:'/manage/uploadExe',
+        path:'uploadExe',
         name:'uploadExe',
         component: ()=>
             import('../views/manages/uploadExe')
       },
       {
-        path:'/manage/manageVideo',
+        path:'manageVideo',
         name:'manageVideo',
         component: ()=>
             import('../views/manages/manageVideo')
       },
       {
-        path:'/manage/manageExe',
+        path:'manageExe',
         name:'manageExe',
         component: ()=>
             import('../views/manages/manageExe')
       },
       {
-        path:'/manage/uploadPrepare',
+        path:'uploadPrepare',
         name:'uploadPrepare',
         component: ()=>
             import('../views/manages/uploadPrepare')
       },
       {
-        path:'/manage/adminPrepare',
+        path:'adminPrepare',
         name:'adminPrepare',
         component: ()=>
             import('../views/admin/adminPrepare')
       },
       {
-        path:'/manage/adminVideo',
+        path:'adminVideo',
         name:'adminVideo',
         component: ()=>
             import('../views/admin/adminVideo')
       },
       {
-        path:'/manage/adminExe',
+        path:'adminExe',
         name:'adminExe',
         component: ()=>
             import('../views/admin/adminExe')
       },
       {
-        path:'/manage/adminManageVideo',
+        path:'adminManageVideo',
         name:'adminManageVideo',
         component: ()=>
             import('../views/admin/adminManageVideo')
       },
       {
-        path:'/manage/adminManageExe',
+        path:'adminManageExe',
         name:'adminManageExe',
         component: ()=>
             import('../views/admin/adminManageExe')
       },
     ]
   },
+  // {
+  //   path: "/exercise",
+  //   name: "Exercise",
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../views/exercise.vue")
+  // },
   {
-    path: "/exercise",
-    name: "Exercise",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/exercise.vue")
-  },
-  {
-    path: "/user",
-    name: "User",
+    path: '/user',
+    name: 'User',
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/user.vue")
   },
   {
-    path: "/user/wrongExercise",
-    name: "WrongExercise",
+    path: '/user/wrongExercise',
+    name: 'WrongExercise',
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/myWrongExercise.vue")
   },
@@ -132,15 +132,15 @@ const router = new Router({
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/edit.vue")
   },
+  // {
+  //   path: "/user/dedit",
+  //   name: "DirectorEdit",
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../components/directorEdit.vue")
+  // },
   {
-    path: "/user/dedit",
-    name: "DirectorEdit",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../components/directorEdit.vue")
-  },
-  {
-    path: "/user/editZhangHao",
-    name: "EditZhangHao",
+    path: "/user/editAccount",
+    name: "EditAccount",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/editZhanghao.vue")
   },
