@@ -10,9 +10,9 @@
       text-color="#fff"
       active-text-color="#ffd04b">
       <h1><a>家教</a></h1>
-      <el-menu-item index="/">主页</el-menu-item>
+      <el-menu-item index="/index">主页</el-menu-item>
       <el-menu-item index="allClass">课程</el-menu-item>
-      <el-menu-item index="3">作业</el-menu-item>
+      <el-menu-item index="/allExercise">作业</el-menu-item>
       <el-menu-item index="/manage/uploadVideo">视频管理</el-menu-item>
       <div class="user">
 <!--          <el-submenu>-->

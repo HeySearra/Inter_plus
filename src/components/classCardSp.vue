@@ -52,7 +52,7 @@
     },
     methods:{
       toVideo(){
-        this.$router.push({name: 'classView', params:{classId: this.classCard.classId}})
+        this.$router.push({name: 'course_info', params:{classId: this.classCard.classId}})
       },
       toTeacher(){
         this.$router.push({name: 'User'})

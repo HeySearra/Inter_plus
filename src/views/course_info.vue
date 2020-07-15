@@ -1,26 +1,47 @@
 <template>
 <div>
   <el-container>
-    <el-header>
-      <NavBar></NavBar>
-    </el-header>
     <el-container class="mid">
+      <el-aside width="300px" style="margin-left: 100px;">
+        <cib :class-card="classCard"></cib>
+      </el-aside>
       <el-container>
-        <el-main>
-          <cib></cib>
-          <cib></cib>
-          <cib></cib>
-          <cib></cib>
-          <cib></cib>
+        <el-main style="margin-right: 100px;">
+          <div>课程章节列表</div>
+          <el-table
+          :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+          style="width: 100%">
+          <el-table-column
+            label="章节"
+            prop="name">
+            <template slot-scope="scope">
+              <i class="el-icon-reading"></i>
+              <el-button style="margin-left: 10px; color: black;" type="text" @click="toClassView(scope.row.name)">
+                {{ scope.row.name }}</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="更新日期"
+            prop="date">
+          </el-table-column>
+          <el-table-column
+            align="right">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="输入章节搜索"/>
+            </template>
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">查看笔记本</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
         </el-main>
       </el-container>
-      <el-aside width="300px">
-        <cib></cib>
-        <cib></cib>
-        <cib></cib>
-      </el-aside>
     </el-container>
-    <el-footer>Footer</el-footer>
   </el-container>
 </div>
 </template>
@@ -30,14 +51,50 @@ export default {
   name: 'course_info',
   data () {
     return {
+      classCard:{
+        classId: 1,
+        className: '语文',
+        classIcon: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        teacherName: '李廷',
+        classDate: '2019-07-03',
+        classIntro: '名师开设语文课！',
+        stuNum: 20,
+      },
+      tableData: [{
+        date: '2016-05-02',
+        name: '1.1',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '1.2',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, {
+        date: '2016-05-01',
+        name: '1.3',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, {
+        date: '2016-05-03',
+        name: '2.1',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }],
+      search: ''
+    }
+  },
+  methods:{
+    handleEdit(index, row) {
+      console.log(index, row);
+      this.$router.push({name: 'note_edit'})
+    },
+    toClassView(chapter){
+      console.log(chapter)
+      this.$router.push({name: 'classView', params:{classId: this.classCard.classId}})
     }
   }
 }
 </script>
 
 
-<style>
-@import url("//unpkg.com/element-ui@2.13.1/lib/theme-chalk/index.css");
+<style >
   
   .el-aside {
     color: #333;

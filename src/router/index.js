@@ -114,12 +114,6 @@ const router = new Router({
       },
     ]
   },
-  // {
-  //   path: "/exercise",
-  //   name: "Exercise",
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/exercise.vue")
-  // },
   {
     path: '/user',
     name: 'User',
@@ -138,12 +132,6 @@ const router = new Router({
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/edit.vue")
   },
-  // {
-  //   path: "/user/dedit",
-  //   name: "DirectorEdit",
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../components/directorEdit.vue")
-  // },
   {
     path: "/user/editAccount",
     name: "EditAccount",
@@ -156,23 +144,22 @@ const router = new Router({
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/editTeacher.vue")
   },
-
-  // {
-  //   path: '/course_info',
-  //   name: 'course_info',
-  //   component: course_info,
-  //   meta:{
-  //     title: '课程介绍'
-  //   }
-  // },
-  // {
-  //   path: '/note_edit',
-  //   name: 'note_edit',
-  //   component: note_edit,
-  //   meta:{
-  //     title: '撰写笔记'
-  //   }
-  // }
+  {
+    path: '/course_info',
+    name: 'course_info',
+    component: course_info,
+    meta:{
+      title: '课程介绍'
+    }
+  },
+  {
+    path: '/note_edit',
+    name: 'note_edit',
+    component: note_edit,
+    meta:{
+      title: '撰写笔记'
+    }
+  }
 ],
 });
 

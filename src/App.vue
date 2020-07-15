@@ -23,7 +23,7 @@ export default {
 <style>
   body, .el-header, .el-footer{
     margin:0;
-    padding:0, 0;
+    padding:0;
     min-width:1000px;
   }
   
