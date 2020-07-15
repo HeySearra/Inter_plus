@@ -35,6 +35,12 @@ const router = new Router({
         import("../views/classView.vue")
   },
   {
+    path: "/allExercise",
+    name: "AllExercise",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/allExercise.vue")
+  },
+  {
     path:'/exercise/:classId/:level',
     name:'exercise',
     component: () =>
