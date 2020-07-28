@@ -14,7 +14,7 @@
 				</div>
 			</el-col>
 		</el-row>
-<el-row>
+<el-row style="background:white">
   <el-col :span="15">
       <el-row><el-menu default-active="/user/wrongExercise" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>
   <el-menu-item index="/user">我的课程</el-menu-item>
@@ -22,7 +22,7 @@
  </el-menu>
  </el-row>
 <el-row class="tac">
-  <el-col :span="4">
+  <el-col :span="4" >
     <h5>选择题型</h5>
     <el-menu
       :default-active="active"
@@ -36,6 +36,9 @@
       </el-menu-item>
       <el-menu-item index="3">
         <span slot="title">填空题</span>
+      </el-menu-item>
+      <el-menu-item index="4">
+        <span slot="title">主观题</span>
       </el-menu-item>
     </el-menu>
   </el-col>
@@ -81,12 +84,24 @@
         </li>
     </ul>
    </div>
+   <div v-show="active=='4'">
+         <h3>主观题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button type="primary" @click="showinput=!showinput">显示答案</el-button></h3>
+    <ul v-for="(item,index) in input" :key="index">
+        <li style="position:relative"> 
+              <el-button style="position:absolute;right:-50px" type="danger" icon="el-icon-delete" circle></el-button>
+            <span>第{{ index+1 }}题: {{item.title}}</span>
+         <el-input  type="textarea" :rows="2" placeholder="请输入内容" v-model="item.textarea" clearable></el-input>
+         <p v-show="showinput" style="font-size:16px;border-radius: 2px;border:solid 1px">正确答案:&nbsp;&nbsp;<span style="font-size:20px;color:red">{{item.right}}</span></p>
+        <p v-show="showinput" style="font-size:16px;border-radius: 2px;border:solid 1px"><span style="font-size:12px">你错写为:{{item.wrong}}</span></p>
+        </li>
+    </ul>
+   </div>
   </el-col>
 </el-row>
 
   </el-col>
   <el-col :span="2">
- <el-dropdown @command="handleCommand">
+ <el-dropdown @command="handleCommand" style="margin-top:30px">
   <span class="el-dropdown-link">
     {{click}}<i class="el-icon-arrow-down el-icon--right"></i>
   </span>
@@ -99,13 +114,7 @@
 </el-row>
   </el-col>
   <el-col :span="6">
-    <el-card class="box-card" shadow="hover"> 
-  <div class="text item">
-       <el-button type="primary" plain @click="toEdit">修改个人信息</el-button>
-     <p>观看了N个视频</p>
-     <p>已经收集了N个错题</p>
-  </div>
-</el-card>
+    <user-info></user-info>
 
   </el-col>
 </el-row>
@@ -113,9 +122,12 @@
   </div>
 </template>
 <script>
+import userInfo from '../components/userInfo.vue'
   export default {
-     name: "WrongExercise",
-
+     name: "WrongExercise",    
+     components: {
+      userInfo,
+  },
     data() {
       return {
         items:["全部课程","英语","数学","语文"],
@@ -132,6 +144,10 @@
         input:[
             {title:"你喜欢",input:"",right:"sda",wrong:"sad"},
             {title:"你喜欢",input:""},
+        ],
+           textarea:[
+            {title:"你喜欢", textarea:"hgjh",right:"sda",wrong:"sad"},
+            {title:"你喜欢", textarea:"",right:"sda",wrong:"sad"}
         ],
         showone:false,
         showmore:false,
@@ -221,4 +237,5 @@
   .box-card {
     width: 480px;
   }
+  li{ list-style: none;}
 </style>

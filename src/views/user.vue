@@ -35,23 +35,19 @@
 </el-row>
   </el-col>
   <el-col :span="6">
-    <el-card class="box-card" shadow="hover"> 
-  <div class="text item">
-     <el-button type="primary" plain @click="toEdit">修改个人信息</el-button>
-     <p>观看了N个视频</p>
-     <p>已经收集了N个错题</p>
-  </div>
-</el-card>
-
+      <user-info></user-info>
   </el-col>
 </el-row>
 
   </div>
 </template>
 <script>
+import userInfo from '../components/userInfo.vue'
   export default {
      name: "User",
-
+       components: {
+      userInfo,
+  },
     data() {
       return {
         myClass:[

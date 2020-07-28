@@ -1,10 +1,7 @@
 <template>
-  <div>
-    <h1>{{kecheng}}{{xiaojie}}习题 <el-row>
-  <el-button round @click="easy"> 简单</el-button>
-  <el-button type="success" round @click="middle">中等</el-button>
-  <el-button type="danger" round @click="hard">困难</el-button>
-</el-row></h1>  
+  <div style="background:white;padding:20px">
+    <h1>{{kecheng}}{{xiaojie}}习题  <el-tag > <el-link @click="toExe('1',classInfo.classId)">前往写题</el-link></el-tag> </h1>  
+  
     <div v-show="one.length>0">
     <h3>单选题</h3>
     <ul v-for="(item,index) in one" :key="index">
@@ -35,9 +32,14 @@
             <el-input placeholder="请输入内容" v-model="item.input" clearable></el-input>
         </li>
     </ul>
+       <h3>主观题</h3>
+    <ul v-for="(item,index) in textarea" :key="index"  >
+        <li> 
+            <span>第{{ index+1 }}题: {{item.title}}</span>
+            <el-input  type="textarea" :rows="2" placeholder="请输入内容" v-model="item.textarea" clearable></el-input>
+        </li>
+    </ul>
     </div>
-    
-    <el-button type="primary" >提交</el-button>
   </div>
 </template>
 <script>
@@ -57,6 +59,10 @@ export default {
         input:[
             {title:"你喜欢",input:""},
             {title:"你喜欢",input:""}
+        ],
+        textarea:[
+            {title:"你喜欢", textarea:"hgjh"},
+            {title:"你喜欢", textarea:""}
         ]
     };
   },
@@ -71,3 +77,6 @@ export default {
   }
 };
 </script>
+<style>
+li{ list-style: none;}
+</style>

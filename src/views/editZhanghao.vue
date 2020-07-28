@@ -1,17 +1,17 @@
 <template>
   <el-row>
-  <el-col :span="5"><div class="grid-content"></div></el-col>
-  <el-col :span="14">
-    <el-container>
-  <el-header>
-    <el-menu default-active="/user/editAccount" class="el-menu-demo" mode="horizontal" router>
-  <el-menu-item index="/user/edit">资料设置</el-menu-item>
-   <el-menu-item index="/user/editAccount">账号设置</el-menu-item>
-    <el-menu-item index="/user/editTeacher">申请成为老师</el-menu-item>
-</el-menu>
-  </el-header>
-  <el-main>
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-col :span="5"><div class="grid-content"></div></el-col>
+    <el-col :span="14" style="background:white">
+      <el-container>
+        <div> 
+        <el-menu default-active="/user/editAccount" class="el-menu-demo" mode="horizontal" router>
+          <el-menu-item index="/user/edit">资料设置</el-menu-item>
+          <el-menu-item index="/user/editAccount">账号设置</el-menu-item>
+          <el-menu-item index="/user/editTeacher">申请成为老师</el-menu-item>
+        </el-menu>
+      </div>
+      <el-main>
+          <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
   <el-form-item label="密码" prop="pass">
     <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
   </el-form-item>
@@ -21,19 +21,18 @@
    <el-form-item label="常用邮箱" prop="email">
     <el-input v-model="ruleForm.email"></el-input>
   </el-form-item>
-   <el-form-item label="电话" prop="phone">
-    <el-input v-model="ruleForm.phone"></el-input>
-  </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
   </el-form-item>
 </el-form>
-  </el-main>
-</el-container>
-    
+      </el-main>
+      <el-footer>Footer</el-footer>
+    </el-container>
   </el-col>
+   <el-col :span="5"><div class="grid-content"></div></el-col>
 </el-row>
 </template>
+
 <script>
   export default {
     data() {
