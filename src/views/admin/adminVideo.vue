@@ -1,15 +1,13 @@
 <template>
   <div>
-        <h3>This is checkVideo page.</h3>
+    <h3>This is checkVideo page.</h3>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "adminVideo",
-  }
+export default {
+  name: "adminVideo"
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

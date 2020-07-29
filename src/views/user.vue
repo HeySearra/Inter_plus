@@ -1,142 +1,233 @@
 <template>
   <div>
-    <el-row style="margin-top: 70px;position:relative;height:200px;background:#409eff">
+    <el-row
+      style="position:relative;height:200px;background-color: rgba(192,200,190, 0.5)"
+    >
       <el-col :span="17">
-				<div id="info">
-            <div style="width: 25% ;height:80%;">
-              <div  style="position:absolute;left:10%;top:70px;width: 100px;height:100px;border-radius:100px;-webkit-border-radius:100px; -moz-border-radius:100px;overflow: hidden" >
-                  <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt="头像" style="width:100px;height: 100px; display: block; ; border-radius:100px;">
-              </div>
+        <div id="info">
+          <div style="width: 25% ;height:80%;">
+            <div
+              style="position:absolute;left:10%;top:70px;width: 100px;height:100px;border-radius:100px;-webkit-border-radius:100px; -moz-border-radius:100px;overflow: hidden"
+            >
+              <img
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                alt="头像"
+                style="width:100px;height: 100px; display: block; border-radius:100px;"
+              />
             </div>
-            <div style="position:absolute;left:40%;top:20px;">
-              <h4 class="lead">{{ name }}</h4>
-            </div>
-				</div>
-			</el-col>
-		</el-row>
+          </div>
+          <div style="position:absolute;left:40%;top:20px;">
+            <h4 class="lead">{{ name }}</h4>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
     <el-row>
       <el-col :span="17">
-        <el-menu default-active="/user" class="el-menu-demo" mode="horizontal" @select="handleSelect" router>
+        <el-menu
+          default-active="/user"
+          class="el-menu-demo"
+          mode="horizontal"
+          @select="handleSelect"
+          router
+        >
           <el-menu-item index="/user">我的课程</el-menu-item>
           <el-menu-item index="/user/wrongExercise">我的错题本</el-menu-item>
-         </el-menu>
-      <el-row :gutter="20" >
-      <el-col :span="4" v-for="(item, index) in myClass" :key="index" :offset="index > 0 ? 0 : 0">
-    <el-card :body-style="{ padding:'10px'}" style="margin-top: 10px;" shadow="hover">
-      <el-button @click="toClass(item)" style="padding: 0; line-height: 0;"><el-image :src="item.jpg" :fit="'scale-down'" @click="toClass(item)"></el-image></el-button>
-      <div style="padding: 14px;">
-        <el-link style="color:black; font-size: larger">{{item.name}}</el-link><!--最好改成router跳转，传参-->
-        <div class="bottom clearfix">
-          <time class="time">于{{ item.date }} 加入学习</time>
-        </div>
-      </div>
-    </el-card>
-  </el-col>
-</el-row>
-  </el-col>
-  <el-col :span="6">
-      <user-info></user-info>
-  </el-col>
-</el-row>
-
+        </el-menu>
+        <el-row :gutter="20">
+          <el-col
+            :span="4"
+            v-for="(item, index) in myClass"
+            :key="index"
+            :offset="index > 0 ? 0 : 0"
+          >
+            <el-card
+              :body-style="{ padding: '10px' }"
+              style="margin-top: 10px;"
+              shadow="hover"
+            >
+              <el-button
+                @click="toClass(item)"
+                style="padding: 0; line-height: 0;"
+                ><el-image
+                  :src="item.jpg"
+                  :fit="'scale-down'"
+                  @click="toClass(item)"
+                ></el-image
+              ></el-button>
+              <div style="padding: 14px;">
+                <el-link style="color:black; font-size: larger">{{
+                  item.name
+                }}</el-link
+                ><!--最好改成router跳转，传参-->
+                <div class="bottom clearfix">
+                  <time class="time">于{{ item.date }} 加入学习</time>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="6">
+        <user-info></user-info>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
-import userInfo from '../components/userInfo.vue'
-  export default {
-     name: "User",
-       components: {
-      userInfo,
+import userInfo from "../components/userInfo.vue";
+export default {
+  name: "User",
+  components: {
+    userInfo
   },
-    data() {
-      return {
-        myClass:[
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",classId:1,date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",classId:'1',date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
-          {jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",name:"课程名称",href:"",date:"2020/7/2"},
-        ],
-        jpg:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-        name:"Gua"
-      }
+  data() {
+    return {
+      myClass: [
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          courseId: 1,
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          courseId: "1",
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          href: "",
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          href: "",
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          href: "",
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          href: "",
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          href: "",
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          href: "",
+          date: "2020/7/2"
+        },
+        {
+          jpg:
+            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+          name: "课程名称",
+          href: "",
+          date: "2020/7/2"
+        }
+      ],
+      jpg:
+        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      name: "Gua"
+    };
+  },
+  methods: {
+    toClass(item) {
+      this.$router.push({
+        name: "classView",
+        params: { courseId: item.courseId }
+      });
     },
-    methods:{
-      toClass(item){
-        this.$router.push({name:'classView', params:{classId:item.classId}})
-      },
-      handleSelect(key, keyPath) {
-          console.log(key,keyPath)
-        this.active=key;
-      },
-      toEdit(){
-        this.$router.push({name: 'Edit'})
-      }
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+      this.active = key;
+    },
+    toEdit() {
+      this.$router.push({ name: "Edit" });
     }
-  };
+  }
+};
 </script>
 <style scoped>
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    line-height: 60px;
-  }
-  
-  .el-aside {
-    color: #333;
-  }
-  .time {
-    font-size: 13px;
-    color: #999;
-  }
-  
-  .bottom {
-    margin-top: 13px;
-    line-height: 12px;
-  }
+.el-header {
+  background-color: #b3c0d1;
+  color: #333;
+  line-height: 60px;
+}
 
-  .button {
-    padding: 0;
-    float: right;
-  }
+.el-aside {
+  color: #333;
+}
+.time {
+  font-size: 13px;
+  color: #999;
+}
 
-  .image {
-    width: 100%;
-    display: block;
-  }
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+}
 
-  .clearfix:before,
-  .clearfix:after {
-      display: table;
-      content: "";
-  }
-  
-  .clearfix:after {
-      clear: both
-  }
+.button {
+  padding: 0;
+  float: right;
+}
 
-  .el-col {
-    border-radius: 4px;
-  }
- 
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
-  
-  .text {
-    font-size: 14px;
-  }
+.image {
+  width: 100%;
+  display: block;
+}
 
-  .item {
-    padding: 18px 0;
-  }
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
 
-  .box-card {
-    width: 480px;
-  }
+.clearfix:after {
+  clear: both;
+}
+
+.el-col {
+  border-radius: 4px;
+}
+
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+
+.box-card {
+  width: 480px;
+}
 </style>

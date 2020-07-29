@@ -5,12 +5,17 @@
         :default-active="activeIndex"
         class="el-menu-vertical-demo"
         @select="handleSelect"
-        background-color="#545c64"
-        text-color="#fff"
         router
-        active-text-color="#ffd04b">
+        background-color="#c0c8be"
+        text-color="#494747"
+        active-text-color="#917148"
+      >
         <el-menu-item-group>
-          <template slot="title"><span style="margin-right: 15px; font-size: larger">教师</span></template>
+          <template slot="title"
+            ><span style="margin-right: 15px; font-size: larger"
+              >教师</span
+            ></template
+          >
           <el-menu-item index="/manage/uploadPrepare">
             <span slot="title">提交备课申请</span>
           </el-menu-item>
@@ -28,7 +33,11 @@
           </el-menu-item>
         </el-menu-item-group>
         <el-menu-item-group>
-          <template slot="title"><span style="margin-right: 15px; font-size: larger">管理员</span></template>
+          <template slot="title"
+            ><span style="margin-right: 15px; font-size: larger"
+              >管理员</span
+            ></template
+          >
           <el-menu-item index="/manage/adminPrepare">
             <span slot="title">审核备课文件</span>
           </el-menu-item>

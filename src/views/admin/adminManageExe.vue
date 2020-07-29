@@ -1,15 +1,13 @@
 <template>
   <div>
-        <h3>This is upload exercise page.</h3>
+    <h3>This is upload exercise page.</h3>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "adminManageExe",
-  }
+export default {
+  name: "adminManageExe"
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

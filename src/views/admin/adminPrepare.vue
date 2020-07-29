@@ -1,15 +1,13 @@
 <template>
   <div>
-        <h3>This is check prepare files page.</h3>
+    <h3>This is check prepare files page.</h3>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "adminPrepare",
-  }
+export default {
+  name: "adminPrepare"
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
