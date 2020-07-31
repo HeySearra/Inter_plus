@@ -2,8 +2,8 @@
   <div class="classCarousel">
     <el-carousel trigger="click">
       <el-carousel-item v-for="item in list" :key="item.courseId"
-        ><div @click="toClass(item)">
-          <el-image :src="item.class_img" :fit="'contain'"> </el-image>
+        ><div @click="toClass(item)" style="cursor: pointer;">
+          <el-image :src="item.class_img" :fit="'scale-down'"> </el-image>
         </div>
       </el-carousel-item>
     </el-carousel>

@@ -3,7 +3,7 @@
     <el-container>
       <el-container class="mid">
         <el-aside width="300px" style="margin-left: 100px;">
-          <cib :class-card="classCard"></cib>
+          <cib :fclass-card="classCard" :join="join" :like="like" @changeJoin="changeJoin" @changeLike="changeLike"></cib>
         </el-aside>
         <el-container>
           <el-main style="margin-right: 100px;">
@@ -25,7 +25,7 @@
                   <el-button
                     style="margin-left: 10px; color: black;"
                     type="text"
-                    @click="toClassView(scope.row.name)"
+                    @click="toClassView(scope.row)"
                   >
                     {{ scope.row.name }}</el-button
                   >
@@ -33,16 +33,16 @@
               </el-table-column>
               <el-table-column label="更新日期" prop="date"> </el-table-column>
               <el-table-column align="right">
-                <template slot="header" slot-scope="scope">
+                <template slot="header">
                   <el-input
                     v-model="search"
-                    size="mini"
+                    size="medium"
                     placeholder="输入章节搜索"
                   />
                 </template>
                 <template slot-scope="scope">
                   <el-button
-                    size="mini"
+                    size="medium"
                     @click="handleEdit(scope.$index, scope.row)"
                     >查看笔记本</el-button
                   >
@@ -61,6 +61,7 @@ export default {
   name: "course_info",
   data() {
     return {
+      userId: 1,
       classCard: {
         courseId: 1,
         className: "语文",
@@ -75,44 +76,80 @@ export default {
       tableData: [
         {
           date: "2016-05-02",
-          name: "1.1",
-          address: "上海市普陀区金沙江路 1518 弄"
+          classId: "1.1",
+          address: "上海市普陀区金沙江路 1518 弄",
+          name: '1.1算法'
         },
         {
           date: "2016-05-04",
-          name: "1.2",
-          address: "上海市普陀区金沙江路 1517 弄"
+          classId: "1.2",
+          address: "上海市普陀区金沙江路 1517 弄",
+          name: '1.2哈希树'
         },
         {
           date: "2016-05-01",
-          name: "1.3",
-          address: "上海市普陀区金沙江路 1519 弄"
+          classId: "1.3",
+          address: "上海市普陀区金沙江路 1519 弄",
+          name: '1.3二叉树'
         },
         {
           date: "2016-05-03",
-          name: "2.1",
-          address: "上海市普陀区金沙江路 1516 弄"
+          classId: "2.1",
+          address: "上海市普陀区金沙江路 1516 弄",
+          name: '2.1搜索树'
         }
       ],
-      search: ""
+      search: "",
+      join: false,
+      like: false
     };
   },
+  mounted(){
+    this.init()
+  },
   methods: {
-    handleEdit(index, row) {
+    init(){
+      this.getCourseInfo()
+    },
+    handleEdit(index, row) {//瞎写的，要改
       console.log(index, row);
       this.$router.push({
         name: "note_edit",
-        params: { courseId: this.classCard.courseId },
+        params: { courseId: this.classCard.courseId, classId: row.classId, note_id: row.address },
         query: { classId: row.name }
       });
     },
-    toClassView(chapter) {
-      console.log(chapter);
+    toClassView(item) {
       this.$router.push({
         name: "classView",
-        params: { courseId: this.classCard.courseId },
-        query: { classId: chapter }
+        params: { courseId: this.classCard.courseId, classId: item.classId, video_src:item.address },
       });
+    },
+    getCourseInfo() {
+      this.$axios({
+        url: "http://127.0.0.1:8000/course/info",
+        method: "GET",
+        params:{ id: this.classCard.courseId}
+      }).then(res => {
+        if (res.status === 200) {
+          let i = res.data
+          this.classCard.courseId = i.id;
+          this.classCard.className = i.name;
+          this.classCard.classIntro = i.intro;
+          this.classCard.class_img = i.class_img;
+          this.classCard.teacherName = i.author_id;
+          this.classCard.like_num = i.who_likes;
+          this.classCard.stuNum = i.who_joins.length;
+          this.join = i.is_join == 1 ? true : false
+          this.like = i.is_like == 1 ? true:false
+        }
+      }).catch(e =>{this.$message({message: e, type: 'error'})});
+    },
+    changeJoin(){
+      this.join = !this.join
+    },
+    changeLike(){
+      this.like = !this.like
     }
   }
 };

@@ -17,7 +17,6 @@
         >
           <span>{{ item.title ? item.title : item.name }}</span></el-button
         >
-        <span v-if="type == 'subject'"> ({{ item.count }})</span>
       </div>
     </div>
   </div>
@@ -37,26 +36,15 @@ export default {
     uid: {
       type: Number,
       default: 0
+    },
+    list: {
+      type: Array
     }
   },
   data() {
     return {
       s_title: "b",
-      c_title: "a",
-      list: [
-        {
-          title: "title1",
-          name: "name1",
-          count: 3,
-          id: 1
-        },
-        {
-          title: "",
-          name: "name2",
-          count: 5,
-          id: 2
-        }
-      ]
+      c_title: "a"
     };
   },
   methods: {

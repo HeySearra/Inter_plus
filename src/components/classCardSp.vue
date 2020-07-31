@@ -38,7 +38,7 @@
                 >
               </div>
               <div class="Intro">
-                <el-button type="text" @click="toVideo">{{
+                <el-button type="text" @click="toClass">{{
                   classCard.classIntro
                 }}</el-button>
               </div>

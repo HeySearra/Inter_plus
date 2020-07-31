@@ -130,7 +130,7 @@ export default {
     };
   },
   mounted() {
-    this.chap = this.$route.query.classId;
+    this.chap = this.$route.params.classId;
   },
   methods: {
     updateDoc(markdown, html) {

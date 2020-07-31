@@ -22,6 +22,16 @@ const router = new Router({
       }
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/login')
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/register')
+    },
+    {
       path: "/allClass",
       name: "allClass",
       component: () => import("../views/allClass.vue")
@@ -155,3 +165,4 @@ const router = new Router({
 });
 
 export default router;
+//http://127.0.0.1:8000/
