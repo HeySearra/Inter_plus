@@ -24,20 +24,17 @@
             class="demo-ruleForm"
           >
             <el-form-item label="头像" prop="jpg">
-              <el-upload
-                class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload"
-              >
-                <img
-                  v-if="ruleForm.circleUrl"
-                  :src="ruleForm.circleUrl"
-                  class="avatar"
-                />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
+               <el-upload
+  class="upload-demo"
+  action="https://jsonplaceholder.typicode.com/posts/"
+  :on-preview="handlePreview"
+  :on-remove="handleRemove"
+  :file-list="ruleForm.jpg"
+  limit="1"
+  list-type="picture">
+  <el-button size="small" type="primary">点击上传</el-button>
+  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+</el-upload>
             </el-form-item>
             <el-form-item label="姓名" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
@@ -74,6 +71,7 @@
             </el-form-item>
           </el-form>
         </el-main>
+        <el-footer></el-footer>
       </el-container>
     </el-col>
     <el-col :span="5"><div class="grid-content"></div></el-col>
@@ -84,8 +82,7 @@ export default {
   data() {
     return {
       ruleForm: {
-        circleUrl:
-          "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        jpg:[],
         name: "",
         region: "",
         sex: "男",
@@ -107,38 +104,86 @@ export default {
         grade: [
           { required: true, message: "请选择您的年级", trigger: "change" }
         ],
-        sex: [{ required: true, message: "请选择性别", trigger: "change" }]
+        sex: [{ required: true, message: "请选择性别", trigger: "change" }],
+        jpg: [{ required: true, message: "请上传头像", trigger: "change" }]
       }
     };
   },
+  
+  mounted(){
+    var that=this
+    this.$axios({
+      url:"http://127.0.0.1:8000/user/user_info",
+      method:"get",
+      params:{
+        id:'123'
+        }
+        }).then(res=>{
+          if(res.status==200){
+            console.log(res);
+            that.ruleForm.jpg=res.data.img;
+            that.ruleForm.name=res.data.name
+            that.ruleForm.region=res.data.major
+            that.ruleForm.sex=res.data.sex
+            that.ruleForm.school=res.data.school
+            that.ruleForm.grade=res.data.grade
+            }
+            })
+            },
   methods: {
-    submitForm(formName) {
+    submitForm(formName) {  
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          var that=this
+          this.$axios({
+            url:'http://127.0.0.1:8000/user/user_info',
+            method:'POST',
+             data: {
+               img:that.ruleForm.jpg.url+that.ruleForm.jpg.name,
+               id:"123",
+               name:that.ruleForm.name,
+               sex:that.ruleForm.sex,
+               school:that.ruleForm.school,
+               major:that.ruleForm.region,
+               grade:that.ruleForm.grade
+               }
+          }).then(res=>{
+            if(res.status==200){
+              if(res.data.status==0)
+                alert('修改成功')
+              else
+                alert('未知错误')
+            }
+          })
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+       resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+     // 移除图片
+    handleRemove() {
+      this.ruleForm.jpg = ''
     },
+    // 上传成功回调
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.ruleForm.jpg=file
+      this.ruleForm.jpg = res.data.url
     },
+    // 上传前格式和图片大小限制
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      const type = file.type === 'image/jpeg' || 'image/jpg' || 'image/webp' || 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!type) {
+        this.$message.error('图片格式不正确!(只能包含jpg，png，webp，JPEG)')
       }
       if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
+        this.$message.error('上传图片大小不能超过 2MB!')
       }
-      return isJPG && isLt2M;
+      return type && isLt2M
     }
   }
 };

@@ -24,8 +24,7 @@
     </el-row>
     <el-row style="background:white">
       <el-col :span="15">
-        <el-row
-          ><el-menu
+        <el-row><el-menu
             default-active="/user/wrongExercise"
             class="el-menu-demo"
             mode="horizontal"
@@ -50,16 +49,19 @@
               <el-menu-item index="2">
                 <span slot="title">多选题</span>
               </el-menu-item>
-              <el-menu-item index="3">
-                <span slot="title">填空题</span>
+               <el-menu-item index="3">
+                <span slot="title">不定项选择题</span>
               </el-menu-item>
               <el-menu-item index="4">
+                <span slot="title">填空题</span>
+              </el-menu-item>
+              <el-menu-item index="5">
                 <span slot="title">主观题</span>
               </el-menu-item>
             </el-menu>
           </el-col>
           <el-col :span="20">
-            <div v-show="active == '1'">
+            <div v-show="active == 1">
               <h3>
                 单选题
                 <el-button type="primary" @click="showone = !showone"
@@ -72,17 +74,41 @@
                     style="position:absolute;right:-50px"
                     type="danger"
                     icon="el-icon-delete"
+                    @click="dele(item.question_type,index,item.id)"
                     circle
                   ></el-button>
-                  <p>第{{ index + 1 }}题: {{ item.title }}</p>
-
+                      <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
+                      <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
+                  </p>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                    </li>
+                  </ul>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                       <div  v-show="item.show_solutions">
+   <el-divider content-position="left">鸭你来看提示啦</el-divider>
+                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
+                  </div>
                   <el-radio-group
                     v-model="item.selected"
                     v-for="(select, ind) in item.selects"
                     :key="ind"
                   >
-                    <el-radio :label="ind">{{ select }}</el-radio>
+                    <el-radio :label="select.name">{{ select.name }}</el-radio>
                   </el-radio-group>
+             
+               
                   <p
                     v-show="showone"
                     style="font-size:16px;border-radius: 2px;border:solid 1px"
@@ -90,15 +116,14 @@
                     正确答案:&nbsp;&nbsp;<span
                       style="font-size:20px;color:red"
                       >{{ item.right }}</span
-                    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:12px"
-                      >你错选为{{ item.wrong }}</span
+                    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     >
                   </p>
                 </li>
               </ul>
-              >
+              
             </div>
-            <div v-show="active == '2'">
+            <div v-show="active == 2">
               <h3>
                 多选题
                 <el-button type="primary" @click="showmore = !showmore"
@@ -112,16 +137,38 @@
                     style="position:absolute;right:-50px"
                     type="danger"
                     icon="el-icon-delete"
+                    @click="dele(item.question_type,index,item.id)"
                     circle
                   ></el-button>
-                  <p>第{{ index + 1 }}题: {{ item.title }}</p>
-
+                  <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
+                   <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
+                   </p>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                    </li>
+                  </ul>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                       <div  v-show="item.show_solutions">
+   <el-divider content-position="left">鸭你来看提示啦</el-divider>
+                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
+                  </div>
                   <el-checkbox-group
                     v-model="item.selected"
                     v-for="(select, ind) in item.selects"
                     :key="ind"
                   >
-                    <el-checkbox :label="select"></el-checkbox>
+                    <el-checkbox :label="select.name">{{select.name}}</el-checkbox>
                   </el-checkbox-group>
                   <p
                     v-show="showmore"
@@ -130,14 +177,73 @@
                     正确答案:&nbsp;&nbsp;<span
                       style="font-size:20px;color:red"
                       >{{ item.right }}</span
-                    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:12px"
-                      >你错选为{{ item.wrong }}</span
+                    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     >
                   </p>
                 </li>
               </ul>
             </div>
-            <div v-show="active == '3'">
+               <div v-show="active == '3'">
+              <h3>
+                不定项选择题
+                <el-button type="primary" @click="showmore = !showmore"
+                  >显示答案</el-button
+                >
+              </h3>
+
+              <ul v-for="(item, index) in more" :key="index">
+                <li style="position:relative">
+                  <el-button
+                    style="position:absolute;right:-50px"
+                    type="danger"
+                    icon="el-icon-delete"
+                    @click="dele(item.question_type,index,item.id)"
+                    circle
+                  ></el-button>
+                   <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
+                    <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
+                    </p>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                    </li>
+                  </ul>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                       <div  v-show="item.show_solutions">
+   <el-divider content-position="left">鸭你来看提示啦</el-divider>
+                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
+                  </div>
+                  <el-checkbox-group
+                    v-model="item.selected"
+                    v-for="(select, ind) in item.selects"
+                    :key="ind"
+                  >
+                    <el-checkbox :label="select.name">{{select.name}}</el-checkbox>
+                  </el-checkbox-group>
+                  <p
+                    v-show="showmore"
+                    style="font-size:16px;border-radius: 2px;border:solid 1px"
+                  >
+                    正确答案:&nbsp;&nbsp;<span
+                      style="font-size:20px;color:red"
+                      >{{ item.right }}</span
+                    >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    >
+                  </p>
+                </li>
+              </ul>
+            </div>
+            <div v-show="active == '4'">
               <h3>
                 填空题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button
                   type="primary"
@@ -151,14 +257,41 @@
                     style="position:absolute;right:-50px"
                     type="danger"
                     icon="el-icon-delete"
+                    @click="dele(item.question_type,index,item.id)"
                     circle
                   ></el-button>
-                  <span>第{{ index + 1 }}题: {{ item.title }}</span>
-                  <el-input
+                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
+                     <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
+                     </p>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                    </li>
+                  </ul>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                       <div  v-show="item.show_solutions">
+   <el-divider content-position="left">鸭你来看提示啦</el-divider>
+                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
+                  </div>
+                  <ul v-for="(it,ind) in item.answers" :key="ind">
+                    <li>
+                       <el-input
                     placeholder="请输入内容"
-                    v-model="item.input"
+                    v-model="it.input"
                     clearable
                   ></el-input>
+                    </li>
+                  </ul>
                   <p
                     v-show="showinput"
                     style="font-size:16px;border-radius: 2px;border:solid 1px"
@@ -172,14 +305,14 @@
                     v-show="showinput"
                     style="font-size:16px;border-radius: 2px;border:solid 1px"
                   >
-                    <span style="font-size:12px"
-                      >你错写为:{{ item.wrong }}</span
-                    >
+                  
                   </p>
                 </li>
               </ul>
             </div>
-            <div v-show="active == '4'">
+      
+
+          <div v-show="active == '5'">
               <h3>
                 主观题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<el-button
                   type="primary"
@@ -193,14 +326,37 @@
                     style="position:absolute;right:-50px"
                     type="danger"
                     icon="el-icon-delete"
+                    @click="dele(item.question_type,index,item.id)"
                     circle
                   ></el-button>
-                  <span>第{{ index + 1 }}题: {{ item.title }}</span>
+                  <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
+                    <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
+                    </p>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                    </li>
+                  </ul>
+                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                    <li>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                       <div  v-show="item.show_solutions">
+   <el-divider content-position="left">鸭你来看提示啦</el-divider>
+                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
+                    <li>
+                      <p v-show="it.text!=null">{{it.text}}</p>
+                      <img v-show="it.img!=null" :src="it.img">
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
+                  </div>
                   <el-input
                     type="textarea"
                     :rows="2"
                     placeholder="请输入内容"
-                    v-model="item.textarea"
+                    v-model="item.answers[0].textarea"
                     clearable
                   ></el-input>
                   <p
@@ -216,13 +372,12 @@
                     v-show="showinput"
                     style="font-size:16px;border-radius: 2px;border:solid 1px"
                   >
-                    <span style="font-size:12px"
-                      >你错写为:{{ item.wrong }}</span
-                    >
-                  </p>
+        
+                  </p> 
                 </li>
               </ul>
             </div>
+           
           </el-col>
         </el-row>
       </el-col>
@@ -232,8 +387,8 @@
             {{ click }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="item in items" :key="item" :command="item">
-              {{ item }}</el-dropdown-item
+            <el-dropdown-item v-for="item in items" :key="item" :command="item" @click.native="selectClass(item)">
+              {{ item.name }}</el-dropdown-item
             >
           </el-dropdown-menu>
         </el-dropdown>
@@ -254,48 +409,42 @@ export default {
   },
   data() {
     return {
-      items: ["全部课程", "英语", "数学", "语文"],
-      click: "全部课程",
+       info: {
+          sex:0,
+          school:"",
+          major:"sad",
+          grade:"543",
+          email:"241"
+    },
+      items: [{name:"英语",id:-1}],
+      click: "英语",
       active: "1",
       one: [
-        {
-          title: "你最喜欢",
-          selects: ["红色", "蓝色", "黄色"],
-          selected: "",
-          right: "D",
+          { question_type:1,id:"",title: "题目描述", selects: [{name:"红色"}],selected:"",difficulty:0,stems:[{img:null,text:"题干描述",type:0}],show_solutions:false,solutions:[{img:"ss",text:"dasd",type:1,if_last:1}]
+          ,right: "D",
           wrong: "C"
+          
         },
-        {
-          title: "你最喜欢",
-          selects: ["红色", "蓝色", "黄色"],
-          selected: "",
-          right: "D",
-          wrong: "A"
-        }
       ],
       more: [
         {
-          title: "你喜欢",
-          selected: [],
-          selects: ["红色", "蓝色", "黄色"],
+          id:"",title: "你喜欢", selects: [{name:"红色"}] ,selected: ["红色"], difficulty:0,
           right: ["A", "B"],
           wrong: ["C"]
         },
+      ],
+      maybe: [
         {
-          title: "你喜欢",
-          selected: [],
-          selects: ["红色", "蓝色", "黄色"],
+          id:"",title: "你喜欢", selects: [{name:"红色"}] ,selected: ["红色"], difficulty:0,
           right: ["A", "B"],
           wrong: ["C"]
-        }
+        },
       ],
       input: [
-        { title: "你喜欢", input: "", right: "sda", wrong: "sad" },
-        { title: "你喜欢", input: "" }
+        { id:"",title: "你喜欢", answers:[{answer:"",input: ["fsdf"]},{answer:"",input: ["fsdf"]}],difficulty:0, right: "sda", wrong: "sad" },
       ],
       textarea: [
-        { title: "你喜欢", textarea: "hgjh", right: "sda", wrong: "sad" },
-        { title: "你喜欢", textarea: "", right: "sda", wrong: "sad" }
+        {id:"", title: "你喜欢",answers:[{answer:"", textareas:""}],difficulty:0, right: "sda", wrong: "sad" },
       ],
       showone: false,
       showmore: false,
@@ -303,20 +452,249 @@ export default {
       jpg: "C:/Users/鸡蛋酱/IdeaProjects/untitled/myweb/src/jpg/book2.jpg",
       name: "Gua"
     };
+  }
+  ,
+  mounted(){
+    var that=this
+    this.$axios({
+      url:"http://127.0.0.1:8000/course/user_list",
+      method:"post",
+      data:{}
+        }).then(res=>{
+          if(res.status==200){
+            console.log(res);
+            for(var i=0;i<res.data.courses.length;i++){
+              var item={name:res.data.courses[i].name,id:res.data.courses[i].id}
+            that.items.push(item)
+            }
+            }
+            })
   },
   methods: {
-    handleCommand(command) {
-      this.click = command;
-    },
+  //  handleCommand(command) {
+   //   this.click = command.name;
+    //  this.$message('click on item ' + command);
+  //  },
+    selectClass(item){
+       this.click = item.name;
+       var that=this
+    this.$axios({
+      url:"http://127.0.0.1:8000/post_wrong_exercise_file",
+      method:"post",
+      data:{
+        subject_id:item.id,
+        user_id:0
+      }
+        }).then(res=>{
+          if(res.status==200){
+            console.log(res);
+            that.question_ids=res.data.question_ids
+            }
+            })
+        //////接下来同获取题目信息    t同allexercise
+      ////////复制  
+        for(i=0;i<that.that.question_ids.length;i++){
+          this.$axios({
+            url:'http://127.0.0.1:8000//exercise/question/info',
+             method:'GET',
+             params: {
+        id:that.question_ids[i].question_id
+        }
+          }).then(res=>{
+            if(res.status==200){
+              var dan={id:that.question_ids[i],title: res.data.text,difficulty:res.data.difficulty,tags:res.data.tags,solutions:res.data.solutions,stems:res.data.stems,show_solutions:false,right:[],wrong:[]}
+              if(res.data.question_type==1){
+                that.one.push(dan)
+              }
+              if(res.data.question_type==2){ 
+                that.input.push(dan)
+              }
+              else if(res.data.question_type==3){     
+                that.more.push(dan)
+              }
+            }
+            else if(res.data.question_type==4){              
+                that.maybe.push(dan)
+              }
+              else if(res.data.question_type==5){
+                that.textarea.push(dan)
+              }
+          })
+          /////获取单选题选项
+     for(i=0;i<that.one.length;i++){
+          this.$axios({
+            url:'http://127.0.0.1:8000/exercise/questions/choices',
+             method:'POST',
+             data: {
+        question_id:that.one.id
+        }
+          }).then(res=>{
+            if(res.status==200){
+              that.one[i].selects=res.data.choices
+          }})
+    }   
+    ////获取多选题选项
+    for(i=0;i<that.more.length;i++){
+          this.$axios({
+            url:'http://127.0.0.1:8000/exercise/questions/choices',
+             method:'POST',
+             data: {
+        question_id:that.more[i].id
+        }
+          }).then(res=>{
+            if(res.status==200){
+              that.more[i].selects=res.data.choices
+          }})
+    }
+    ////获取不定项选项
+       for(i=0;i<that.maybe.length;i++){
+          this.$axios({
+            url:'http://127.0.0.1:8000/exercise/questions/choices',
+             method:'POST',
+             data: {
+        question_id:that.maybe[i].id
+        }
+          }).then(res=>{
+            if(res.status==200){
+              that.maybe[i].selects=res.data.choices
+          }})
+    }
+    ////获取填空题答案
+      for(i=0;i<that.input.length;i++){
+          this.$axios({
+            url:'http://127.0.0.1:8000/exercise/get_blanks',
+             method:'POST',
+             data: {
+        question_id:that.input[i].id
+        }
+          }).then(res=>{
+            if(res.status==200){
+              that.input.answers=res.data.answers
+          }})
+    }
+    ////获取主观题答案
+      for(i=0;i<that.textarea.length;i++){
+          this.$axios({
+            url:'http://127.0.0.1:8000/exercise/get_blanks',
+             method:'POST',
+             data: {
+        question_id:that.textarea[i].id
+        }
+          }).then(res=>{
+            if(res.status==200){
+              that.textarea.answers=res.data.answers
+          }})
+    }
+    }
+    ////////粘贴
+    ////更改right wrong 信息
+    ///单选题
+    for(var j=0;j<that.one.length;j++){
+      for(var i=0;i<that.one[j].records.length;i++)
+{
+if(that.one[j].records[i].finished==false)
+break;
+that.one[j].wrong.push(that.one[j].records[i].answer)
+}
+for(i=0;i<that.one[j].selects.length;i++){
+  if(that.one[j].selects[i].if_true==0)
+  that.one[j].right.push(that.one[j].selects[i].name)
+}
+    }
+    
+////多选题
+  for(j=0;j<that.more.length;j++){
+       for(i=0;i<that.more[j].records.length;i++)
+{
+if(that.more[j].records[i].finished==false)
+break;
+that.more[j].wrong.push(that.more[j].records[i].answer)
+}
+for(i=0;i<that.more[j].selects.length;i++){
+  if(that.more[j].selects[i].if_true==0)
+  that.more[j].right.push(that.more[j].selects[i].name)
+}
+  }
+ 
+///不定项
+  for(j=0;j<that.maybe.length;j++){
+     for(i=0;i<that.maybe[j].records.length;i++)
+{
+if(that.maybe[j].records[i].finished==false)
+break;
+that.maybe[j].wrong.push(that.maybe[j].records[i].answer)
+}
+for(i=0;i<that.maybe[j].selects.length;i++){
+  if(that.maybe[j].selects[i].if_true==0)
+  that.maybe[j].right.push(that.maybe[j].selects[i].name)
+}
+  }
+///填空题
+  for(j=0;j<that.input.length;j++){
+     for(i=0;i<that.input[j].records.length;i++)
+{
+if(that.input[j].records[i].finished==false)
+break;
+that.input[j].wrong.push(that.input[j].records[i].answer)
+}
+for(i=0;i<that.input[j].answers.length;i++){
+  that.input[j].right.push(that.input[j].answers[i].answer)
+}
+  }
+
+////主观题
+  for(j=0;j<that.textarea.length;j++){
+     for(i=0;i<that.textarea[j].records.length;i++)
+{
+if(that.textarea[j].records[i].finished==false){
+  that.textarea[j].wrong=""
+  break;
+}
+that.textarea[j].wrong=that.textarea[j].records[i].answer
+}
+for(i=0;i<that.textarea[j].answers.length;i++){
+  that.textarea[j].right=that.textarea[j].answers[i].answer
+  that.textarea[j].sub_point=that.textarea[j].answers[i].sub_point
+}
+  }
+  },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
       this.active = key;
     },
     toEdit() {
       this.$router.push({ name: "Edit" });
+    },
+    dele(question_type,index,id){
+      if(question_type==1){
+        this.one.splice(index,1)
+      }
+      else if(question_type==2){
+        this.input.splice(index,1)
+      }
+      else if(question_type==3){
+        this.more.splice(index,1)
+      }
+      else if(question_type==4){
+        this.maybe.splice(index,1)
+      }
+      else if(question_type==5){
+        this.textarea.splice(index,1)
+      }
+    this.$axios({
+      url:"http://127.0.0.1:8000/del_exercise",
+      method:"post",
+      data:{
+        question_id:id,
+        user_id:0
+      }
+        }).then(res=>{
+          if(res.status==200){
+            console.log(res);
+            }
+            })
     }
-  }
-};
+}}
 </script>
 <style scoped>
 .el-dropdown-link {

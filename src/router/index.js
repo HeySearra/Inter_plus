@@ -61,10 +61,11 @@ const router = new Router({
       component: () =>
         import(/* webpackChunkName: "about" */ "../views/allExer.vue")
     },
-    {
-      path: "/exercise/:courseId/:classId/:level", //'/exercise/:classId/:zhang/:jie/:level',
-      name: "exercise",
-      component: () => import("../views/exercise.vue")
+     {
+      path: "/allExercise/:courseId/:exerciseId/:level",
+      name: "allExercise",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "../views/allExercise.vue")
     },
     {
       path: "/manage",
