@@ -78,8 +78,7 @@
                     circle
                   ></el-button>
                       <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                      <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                  </p>
+                      </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
@@ -141,7 +140,6 @@
                     circle
                   ></el-button>
                   <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                   <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
                    </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
@@ -201,7 +199,6 @@
                     circle
                   ></el-button>
                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                    <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
                     </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
@@ -261,8 +258,7 @@
                     circle
                   ></el-button>
                     <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                     <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                     </p>
+                    </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
@@ -330,8 +326,7 @@
                     circle
                   ></el-button>
                   <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                    <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                    </p>
+                   </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
@@ -382,7 +377,7 @@
         </el-row>
       </el-col>
       <el-col :span="2">
-        <el-dropdown @command="handleCommand" style="margin-top:30px">
+        <el-dropdown style="margin-top:30px" @command="handleCommand" >
           <span class="el-dropdown-link">
             {{ click }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
@@ -416,8 +411,8 @@ export default {
           grade:"543",
           email:"241"
     },
-      items: [{name:"英语",id:-1}],
-      click: "英语",
+    items:[{name:"sad",id:"123"},{name:"sdddfad",id:"123"}],
+    click:"sad",
       active: "1",
       one: [
           { question_type:1,id:"",title: "题目描述", selects: [{name:"红色"}],selected:"",difficulty:0,stems:[{img:null,text:"题干描述",type:0}],show_solutions:false,solutions:[{img:"ss",text:"dasd",type:1,if_last:1}]
@@ -471,10 +466,9 @@ export default {
             })
   },
   methods: {
-  //  handleCommand(command) {
-   //   this.click = command.name;
-    //  this.$message('click on item ' + command);
-  //  },
+    handleCommand(command) {
+      this.click = command.name;
+    }, 
     selectClass(item){
        this.click = item.name;
        var that=this
