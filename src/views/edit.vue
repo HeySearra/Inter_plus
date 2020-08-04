@@ -26,11 +26,13 @@
             <el-form-item label="头像" prop="jpg">
                <el-upload
   class="upload-demo"
-  action="https://jsonplaceholder.typicode.com/posts/"
+   :action="upload_url"
   :on-preview="handlePreview"
-  :on-remove="handleRemove"
+  :on-remove="handleRemove" 
+  :http-request="uploadSectionFile"
   :file-list="ruleForm.jpg"
-  limit="1"
+    :on-exceed="handleExceed"
+  limit="3"
   list-type="picture">
   <el-button size="small" type="primary">点击上传</el-button>
   <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -81,8 +83,11 @@
 export default {
   data() {
     return {
+      upload_url: 'http://127.0.0.1:8000/upload/pic',
       ruleForm: {
-        jpg:[],
+        upload_name: '',//图片或视频名称
+        ad_url: '',//上传后的图片或视频URL
+         jpg: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}] , 
         name: "",
         region: "",
         sex: "男",
@@ -131,8 +136,16 @@ export default {
             })
             },
   methods: {
+    handleExceed: function () {
+        this.$alert('请先删除选择的图片或视频，再上传', '提示', {
+            type: 'warning'
+        });
+    },
     submitForm(formName) {  
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(valid => { 
+            alert(this.ruleForm.jpg[0].name)   
+            alert(this.ruleForm.jpg[1].name)
+            alert(this.ruleForm.jpg[2])       
         if (valid) {
           var that=this
           this.$axios({
@@ -164,29 +177,16 @@ export default {
        resetForm(formName) {
         this.$refs[formName].resetFields();
       },
-     // 移除图片
-    handleRemove() {
-      this.ruleForm.jpg = ''
-    },
     // 上传成功回调
-    handleAvatarSuccess(res, file) {
-      this.ruleForm.jpg=file
-      this.ruleForm.jpg = res.data.url
-    },
+  //  handleAvatarSuccess(res, file) {
+  //    alert(this.ruleForm.jpg.length) 
+   //   this.ruleForm.jpg=file
+    //  this.ruleForm.jpg.push( res.data.url) 
+//    },
     // 上传前格式和图片大小限制
-    beforeAvatarUpload(file) {
-      const type = file.type === 'image/jpeg' || 'image/jpg' || 'image/webp' || 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
-      if (!type) {
-        this.$message.error('图片格式不正确!(只能包含jpg，png，webp，JPEG)')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!')
-      }
-      return type && isLt2M
-    }
-  }
-};
+ 
+   }}
+  
 </script>
 <style>
 .el-row {
