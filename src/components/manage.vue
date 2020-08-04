@@ -10,9 +10,9 @@
         text-color="#494747"
         active-text-color="#917148"
       >
-        <el-menu-item-group>
+        <el-menu-item-group v-if="isTeacher || isAdmin">
           <template slot="title"
-            ><span style="margin-right: 15px; font-size: larger"
+            ><span style="margin-right: 15px; font-size: larger; font-weight: bold"
               >教师</span
             ></template
           >
@@ -32,9 +32,9 @@
             <span slot="title">管理我的习题</span>
           </el-menu-item>
         </el-menu-item-group>
-        <el-menu-item-group>
+        <el-menu-item-group v-if="isAdmin">
           <template slot="title"
-            ><span style="margin-right: 15px; font-size: larger"
+            ><span style="margin-right: 15px; font-size: larger; font-weight: bold"
               >管理员</span
             ></template
           >
@@ -69,13 +69,43 @@
     data(){
       return{
         activeIndex: this.$route.path,
-        identity: 'manager',
+        isTeacher: true,
+        isAdmin: true
       }
     },
+    mounted(){
+      this.init()
+    },
     methods: {
+      init(){
+
+      },
       handleSelect(key, keyPath) {
         console.log(this.$route.path)
         console.log(key, keyPath);
+      },
+      getUserIdentity(){
+        this.$axios.get('/user/identity', {params:{id: 0}}).then(res=>{
+          if(res.status == 200){
+            this.isTeacher = true
+            this.isAdmin = true
+            if(res.data.identity == 2){
+              this.isAdmin = false
+            }
+            else if(res.data.identity == 1){
+              this.isTeacher = false
+            }
+            else if(res.data.identity == 0){
+              this.isTeacher = this.isAdmin = false
+              this.$message({message:'获取身份失败，请稍后再试', type:'error'})
+            }
+          }
+        }).catch(e =>{
+        this.$message({
+          message: e,
+          type: 'error'
+        })
+      })
       }
     }
   }

@@ -15,6 +15,9 @@ import manage from "./components/manage.vue";
 import lb from "./components/list_block";
 import 'element-ui/lib/theme-chalk/index.css';
 
+axios.defaults.baseURL='http://127.0.0.1:8000'
+axios.defaults.headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+
 Vue.use(Element);
 Vue.prototype.$axios = axios;
 

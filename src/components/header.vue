@@ -24,7 +24,7 @@
       <el-menu-item index="/allExercise" style="font-size: large;"
         >作业</el-menu-item
       >
-      <el-menu-item index="/manage/uploadVideo" style="font-size: large;"
+      <el-menu-item index="/manage/uploadVideo" style="font-size: large;" v-if="isTeacher || isAdmin"
         >视频管理</el-menu-item
       >
       <div class="user">
@@ -64,7 +64,9 @@ export default {
       search: "",//最后写
       active_index: this.$route.path,
       user_img: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-      isLog: false
+      isLog: false,
+      isTeacher: true,
+      isAdmin:true
     };
   },
   mounted(){
@@ -83,9 +85,10 @@ export default {
     handleCommand(command) {
       //this.$message('click on item ' + command)
       if(command === 'LogOut'){
-        this.$axios({url :'http://127.0.0.1:8000/user/login', method: 'GET'}).then(res => {
+        this.$axios.get('/user/login').then(res => {
           if(res.status === 0){
             this.isLog = false
+            localStorage.removeItem('userId')
           } else{
             this.$message({message: '登出失败，稍后再试', type:'error'})
           }
@@ -100,11 +103,10 @@ export default {
     },
     init(){
       this.getUserInfo()
+      this.getUserIdentity()
     },
     getUserInfo(){
-      this.$axios({
-        url: "http://127.0.0.1:8000/user/user_info",
-        method: "GET",
+      this.$axios.get("/user/user_info",{
         params: {
           id: 0
         }
@@ -112,12 +114,36 @@ export default {
         if(res.status === 200){
           this.user_img = res.data.img
           this.isLog = true
+          localStorage.setItem('userId', res.data.id)
         }
         else{
           this.$message({
             message: '获取个人头像失败',
             type: 'error'
           })
+        }
+      }).catch(e =>{
+        this.$message({
+          message: e,
+          type: 'error'
+        })
+      })
+    },
+    getUserIdentity(){
+      this.$axios.get('/user/identity', {params:{id: 0}}).then(res=>{
+        if(res.status == 200){
+          this.isTeacher = true
+          this.isAdmin = true
+          if(res.data.identity == 2){
+            this.isAdmin = false
+          }
+          if(res.data.identity == 1){
+            this.isTeacher = false
+          }
+          else if(res.data.identity == 0){
+            this.isTeacher = this.isAdmin = false
+            this.$message({message:'获取身份失败，请稍后再试', type:'error'})
+          }
         }
       }).catch(e =>{
         this.$message({
