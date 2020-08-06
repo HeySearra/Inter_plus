@@ -121,7 +121,7 @@ export default {
       this.$router.push({
         name: "note_edit",
         params: {
-          courseId: this.classCard.courseId, courseInfo: this.courseInfo, classId: row.classId , userId: this.userId,
+          courseId: this.classCard.courseId, courseInfo: this.courseInfo, classId: row.classId,
         allClass: this.tableData}
       });
     },

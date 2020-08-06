@@ -95,7 +95,6 @@ export default {
     };
   },
   mounted() {
-    this.userId = this.$route.params.userId
     this.courseInfo = this.$route.params.courseInfo
     this.chap = this.$route.params.classId;
     this.chapters = this.$route.params.allClass;
@@ -108,8 +107,7 @@ export default {
           this.note_id = item.note_address;
         }
       })
-      this.$axios.get('/note/info', {params: {user_id:this.userId, classId: chap,
-      course_id: this.courseInfo.courseId}}).then(res=>{
+      this.$axios.get('/note/info', {params: {note_id: this.note_id}}).then(res=>{
         if(res.status == 200){
           console.log(res)
           this.note.id = res.note.id

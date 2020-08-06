@@ -173,8 +173,7 @@ export default {
           this.playerOptions.sources[0].src = res.data.src;
         }
       }).catch(e =>{this.$message({message: e, type: 'error'})})
-      this.$axios.get('/note/info', {params: {user_id:this.userId, classId: chap,
-      course_id: this.courseInfo.courseId}}).then(res=>{
+      this.$axios.get('/note/info', {params: {note_id: this.note_id}}).then(res=>{
         if(res.status == 200){
           console.log(res)
           this.note.id = res.note.id
