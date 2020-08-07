@@ -62,9 +62,9 @@ const router = new Router({
         import(/* webpackChunkName: "about" */ "../views/allExer.vue")
     },
     {
-      path: "/exercise/:courseId/:classId/:level", //'/exercise/:classId/:zhang/:jie/:level',
+      path: "/allExercise/:courseId/:exerciseId/:level", //'/exercise/:classId/:zhang/:jie/:level',
       name: "exercise",
-      component: () => import("../views/exercise.vue")
+      component: () => import("../views/allExercise.vue")
     },
     {
       path: "/manage",
