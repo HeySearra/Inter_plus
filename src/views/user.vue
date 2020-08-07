@@ -10,13 +10,13 @@
               style="position:absolute;left:10%;top:70px;width: 100px;height:100px;border-radius:100px;-webkit-border-radius:100px; -moz-border-radius:100px;overflow: hidden"
             >
               <img
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                :src="jpg"
                 alt="头像"
                 style="width:100px;height: 100px; display: block; border-radius:100px;"
               />
             </div>
           </div>
-          <div style="position:absolute;left:40%;top:20px;">
+          <div style="position:absolute;left:40%;top:50px;">
             <h4 class="lead">{{ name }}</h4>
           </div>
         </div>
@@ -60,16 +60,13 @@
                   item.name
                 }}</el-link
                 ><!--最好改成router跳转，传参-->
-                <div class="bottom clearfix">
-                  <time class="time">于{{ item.date }} 加入学习</time>
-                </div>
               </div>
             </el-card>
           </el-col>
         </el-row>
       </el-col>
       <el-col :span="6">
-        <user-info></user-info>
+        <user-info :info="info"></user-info>
       </el-col>
     </el-row>
   </div>
@@ -83,77 +80,68 @@ export default {
   },
   data() {
     return {
+         info: {
+          sex:0,
+          school:"",
+          major:"sad",
+          grade:"543",
+          email:"241"
+    },
       myClass: [
         {
           jpg:
             "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
           name: "课程名称",
-          courseId: 1,
-          date: "2020/7/2"
+          courseId: 1
         },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          courseId: "1",
-          date: "2020/7/2"
-        },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          href: "",
-          date: "2020/7/2"
-        },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          href: "",
-          date: "2020/7/2"
-        },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          href: "",
-          date: "2020/7/2"
-        },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          href: "",
-          date: "2020/7/2"
-        },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          href: "",
-          date: "2020/7/2"
-        },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          href: "",
-          date: "2020/7/2"
-        },
-        {
-          jpg:
-            "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          name: "课程名称",
-          href: "",
-          date: "2020/7/2"
-        }
       ],
       jpg:
         "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       name: "Gua"
     };
   },
-  methods: {
+  mounted(){
+    var that=this
+    this.$axios({
+      url:"course/user_list",
+      method:"post",
+      data:{
+        id:0
+        }
+        }).then(res=>{
+          if(res.status==200){
+            console.log(res);
+            for(var i=0;i<res.data.courses.length;i++){
+               var course={
+              jpg:res.data.courses[i].class_img,
+              name:res.courses[i].data.name,
+          courseId:res.courses[i].data.id,
+            }
+            that.myClass.push(course)
+            }
+            }
+            })
+     this.$axios({
+      url:"user/user_info",
+      method:"get",
+      params:{
+        id:0
+        }
+        }).then(res=>{
+          if(res.status==200){
+            console.log(res);
+            that.info.sex=res.data.sex
+            that.info.school=res.data.school
+            that.info.major=res.data.major
+            that.info.grade=res.data.grade
+            that.info.email=res.data.email
+            that.jpg=res.data.img
+            that.name=res.data.name
+            }
+            })
+    }
+    ,
+    methods: {
     toClass(item) {
       this.$router.push({
         name: "classView",
