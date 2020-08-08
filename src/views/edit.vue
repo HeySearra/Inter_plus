@@ -24,20 +24,24 @@
             class="demo-ruleForm"
           >
             <el-form-item label="头像" prop="jpg">
-               <el-upload
-  class="upload-demo"
-   :action="upload_url"
-  :on-preview="handlePreview"
-  :on-remove="handleRemove" 
-  :http-request="uploadSectionFile"
-  :file-list="ruleForm.jpg"
-    :on-exceed="handleExceed"
-  limit="3"
-  list-type="picture">
-  <el-button size="small" type="primary">点击上传</el-button>
-  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-</el-upload>
-            </el-form-item>
+                  <el-upload
+              action="#"
+              list-type="picture-card"
+              :limit="1"
+              :file-list="ruleForm.jpg"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              :before-upload="beforeImageUpload"
+              :http-request="uploadImage"
+                :on-exceed="handleExceed"
+              :auto-upload="true"
+            >
+              <i class="el-icon-plus"></i>
+           </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+             <img width="100%" :src="dialogImageUrl" alt />
+           </el-dialog>
+           </el-form-item>
             <el-form-item label="姓名" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
@@ -98,12 +102,15 @@
 export default {
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
+     
       upload_url: 'upload/pic',
       grade:[{name:"一年级",value:1},{name:"二年级",value:2},{name:"三年级",value:3},{name:"四年级",value:4},{name:"五年级",value:5},{name:"六年级",value:6},],
-      ruleForm: {
+      ruleForm: { 
         upload_name: '',//图片或视频名称
         ad_url: '',//上传后的图片或视频URL
-         jpg: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}] , 
+         jpg:[] , 
         name: "",
         region: "",
         sex: "1",   
@@ -147,7 +154,7 @@ export default {
         }).then(res=>{
           if(res.status==200){
             console.log(res);
-            that.ruleForm.jpg=res.data.img;
+            that.ruleForm.jpg.push({name:"头像",url:res.data.img});
             that.ruleForm.name=res.data.name
             that.ruleForm.region=res.data.major
             that.ruleForm.sex=res.data.sex.toString()
@@ -157,6 +164,60 @@ export default {
             })
             },
   methods: {
+      //图片上传之前检验
+    beforeImageUpload(file) {
+      console.log(file)
+      var testmsg=file.name.substring(file.name.lastIndexOf('.')+1) 
+      const isJpg = testmsg === 'jpg' || testmsg === 'png'
+      if (!isJpg) {
+        this.$message.error('上传图片只能是 jpg 或 png 格式!')
+        return false
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 2MB!')
+        return false
+      }
+      // return false // (返回false不会自动上传)
+    },
+handlePictureCardPreview(file) {
+    this.dialogImageUrl = file.url
+     this.dialogVisible = true
+  },
+handleRemove(file, fileList) {
+     this.aa=fileList
+      for(var i = 0; i < this.ruleForm.jpg.length; i++){
+        if(this.ruleForm.jpg[i].url === file.url){
+    //      deleteImageReport(this.fileList[i].id).then(res =>{
+     //       this.$message.success('删除图片成功')
+    //      })
+          this.ruleForm.jpg.splice(i, 1)
+        }
+      }
+    },
+//上传图片
+    uploadImage(image){
+      var that=this
+      this.$axios({
+      url:"/upload/pic",
+      method:"get",
+      params:{
+        img:image.file
+        }
+        }).then(res=>{
+          if(res.status==200){
+            if(res.data.status==0)
+             that.ruleForm.jpg.push({name:"头像",url:res.data.url})
+            }
+            else
+            that.$message("上传失败")
+            })
+    },
+    handleExceed: function () {
+        this.$alert('请先删除选择的图片或视频，再上传  。最多上传一张', '提示', {
+            type: 'warning'
+        });
+    },
      select(grade){ 
       if(grade=="小学")
       this.grade=[{name:"一年级",value:1},{name:"二年级",value:2},{name:"三年级",value:3},{name:"四年级",value:4},{name:"五年级",value:5},{name:"六年级",value:6},]
@@ -166,11 +227,6 @@ export default {
       this.grade=[{name:"高一",value:10},{name:"高二",value:11},{name:"高三",value:12},]
     }
     ,  
-    handleExceed: function () {
-        this.$alert('请先删除选择的图片或视频，再上传', '提示', {
-            type: 'warning'
-        });
-    },
     submitForm(formName) {  
       this.$refs[formName].validate(valid => {         
         if (valid) {
@@ -179,7 +235,7 @@ export default {
             url:'user/user_info',
             method:'POST',
              data: {
-               img:that.ruleForm.jpg.url+that.ruleForm.jpg.name,
+               img:that.ruleForm.jpg[0].url,
                name:that.ruleForm.name, 
                sex:parseInt(that.ruleForm.sex),
                school:that.ruleForm.school,

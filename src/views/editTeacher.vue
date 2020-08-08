@@ -42,43 +42,61 @@
     <el-input type="textarea" v-model="ruleForm.desc"></el-input>
   </el-form-item>
   <el-form-item label="身份证照片" prop="fileList1">
-     <el-upload
-  class="upload-demo"
-  action="https://jsonplaceholder.typicode.com/posts/"
-  :on-preview="handlePreview"
-  limit="1"
-  :file-list="ruleForm.fileList1"
-  list-type="picture"
-  :on-change="handleChange">
-  <el-button size="small" type="primary">点击上传身份证照片</el-button>
-  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-</el-upload>
+       <el-upload
+              action="#"
+              list-type="picture-card"
+              :limit="1"
+              :file-list="ruleForm.fileList1"
+              :on-preview="handlePictureCardPreview1"
+              :on-remove="handleRemove1"
+              :before-upload="beforeImageUpload"
+              :http-request="uploadImage1"
+                :on-exceed="handleExceed"
+              :auto-upload="true"
+            >
+              <i class="el-icon-plus"></i>
+           </el-upload>
+                <el-dialog :visible.sync="dialogVisible1">
+             <img width="100%" :src="dialogImageUrl1" alt />
+           </el-dialog>
   </el-form-item>
   <el-form-item label="学信网照片" prop="fileList2">
-     <el-upload
-  class="upload-demo"
-  action="https://jsonplaceholder.typicode.com/posts/"
-  :on-preview="handlePreview"
-  limit="1"
-  :file-list="ruleForm.fileList2"
-  list-type="picture"
-  :on-change="handleChange">
-  <el-button size="small" type="primary">点击上传学信网照片</el-button>
-  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-</el-upload>
+    <el-upload
+              action="#"
+              list-type="picture-card"
+              :limit="1"
+              :file-list="ruleForm.fileList2"
+              :on-preview="handlePictureCardPreview2"
+              :on-remove="handleRemove2"
+              :before-upload="beforeImageUpload"
+              :http-request="uploadImage2"
+                :on-exceed="handleExceed"
+              :auto-upload="true"
+            >
+              <i class="el-icon-plus"></i>
+           </el-upload>
+                <el-dialog :visible.sync="dialogVisible2">
+             <img width="100%" :src="dialogImageUrl2" alt />
+           </el-dialog>
   </el-form-item>
   <el-form-item label="教师资格证照片" prop="fileList3">
-     <el-upload
-  class="upload-demo"
-  action="https://jsonplaceholder.typicode.com/posts/"
-  :on-preview="handlePreview"
-  limit="1"
-  :file-list="ruleForm.fileList3"
-  list-type="picture"
-  :on-change="handleChange">
-  <el-button size="small" type="primary">点击上传教师资格证照片</el-button>
-  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-</el-upload>
+    <el-upload
+              action="#"
+              list-type="picture-card"
+              :limit="1"
+              :file-list="ruleForm.fileList3"
+              :on-preview="handlePictureCardPreview3"
+              :on-remove="handleRemove3"
+              :before-upload="beforeImageUpload"
+              :http-request="uploadImage3"
+                :on-exceed="handleExceed"
+              :auto-upload="true"
+            >
+              <i class="el-icon-plus"></i>
+           </el-upload>
+                <el-dialog :visible.sync="dialogVisible3">
+             <img width="100%" :src="dialogImageUrl3" alt />
+           </el-dialog>
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="submitForm('ruleForm')">提交申请</el-button>
@@ -95,6 +113,12 @@
   export default {
     data() {
       return {
+      dialogImageUrl1: "",
+      dialogVisible1: false,
+      dialogImageUrl2: "",
+      dialogVisible2: false,
+      dialogImageUrl3: "",
+      dialogVisible3: false,
         grade:"",
         ruleForm: {
           select:"",
@@ -135,6 +159,126 @@
       };
     },
     methods: {
+          //图片上传之前检验
+    beforeImageUpload(file) {
+      console.log(file)
+      var testmsg=file.name.substring(file.name.lastIndexOf('.')+1) 
+      const isJpg = testmsg === 'jpg' || testmsg === 'png'
+      if (!isJpg) {
+        this.$message.error('上传图片只能是 jpg 或 png 格式!')
+        return false
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 2MB!')
+        return false
+      }
+      // return false // (返回false不会自动上传)
+    },
+handlePictureCardPreview1(file) {
+    this.dialogImageUrl1 = file.url
+     this.dialogVisible1 = true
+  },
+  handlePictureCardPreview2(file) {
+    this.dialogImageUrl2 = file.url
+     this.dialogVisible2 = true
+  },
+  handlePictureCardPreview3(file) {
+    this.dialogImageUrl3 = file.url
+     this.dialogVisible3 = true
+  },
+handleRemove1(file, fileList) {
+     this.aa=fileList
+      for(var i = 0; i < this.ruleForm.fileList1.length; i++){
+        if(this.ruleForm.fileList1[i].url === file.url){
+    //      deleteImageReport(this.fileList[i].id).then(res =>{
+     //       this.$message.success('删除图片成功')
+    //      })
+          this.ruleForm.fileList1.splice(i, 1)
+        }
+      }
+    },
+    handleRemove2(file, fileList) {
+     this.aa=fileList
+      for(var i = 0; i < this.ruleForm.fileList2.length; i++){
+        if(this.ruleForm.fileList2[i].url === file.url){
+    //      deleteImageReport(this.fileList[i].id).then(res =>{
+     //       this.$message.success('删除图片成功')
+    //      })
+          this.ruleForm.fileList2.splice(i, 1)
+        }
+      }
+    },
+    handleRemove3(file, fileList) {
+     this.aa=fileList
+      for(var i = 0; i < this.ruleForm.fileList3.length; i++){
+        if(this.ruleForm.fileList3[i].url === file.url){
+    //      deleteImageReport(this.fileList[i].id).then(res =>{
+     //       this.$message.success('删除图片成功')
+    //      })
+          this.ruleForm.fileList3.splice(i, 1)
+        }
+      }
+    },
+//上传图片
+    uploadImage1(image){
+      var that=this
+      this.$axios({
+      url:"/upload/pic",
+      method:"get",
+      params:{
+        img:image.file
+        }
+        }).then(res=>{
+          if(res.status==200){
+            if(res.data.status==0)
+             that.ruleForm.fileList1.push({name:"头像",url:res.data.url})
+            }
+            else
+            that.$message("上传失败")
+            })
+    },
+    //上传图片
+    uploadImage2(image){
+      var that=this
+      this.$axios({
+      url:"/upload/pic",
+      method:"get",
+      params:{
+        img:image.file
+        }
+        }).then(res=>{
+          if(res.status==200){
+            if(res.data.status==0)
+             that.ruleForm.fileList2.push({name:"头像",url:res.data.url})
+            }
+            else
+            that.$message("上传失败")
+            })
+    },
+    //上传图片
+    uploadImage3(image){
+      var that=this
+      this.$axios({
+      url:"/upload/pic",
+      method:"get",
+      params:{
+        img:image.file
+        }
+        }).then(res=>{
+          if(res.status==200){
+            if(res.data.status==0)
+             that.ruleForm.fileList3.push({name:"头像",url:res.data.url})
+            }
+            else
+            that.$message("上传失败")
+            })
+    },
+    handleExceed: function () {
+        this.$alert('请先删除选择的图片或视频，再上传  。最多上传一张', '提示', {
+            type: 'warning'
+        });
+    },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -148,9 +292,9 @@
                graduate_school:that.ruleForm.graduate_school,
                teach_grade:parseInt(that.ruleForm.teach_grade),
                reason:that.ruleForm.reason,
-               img_per:that.ruleForm.fileList1.url+that.ruleForm.fileList1.name,
-               img_xue:that.ruleForm.fileList2.url+that.ruleForm.fileList2.name,
-               img_tea:that.ruleForm.fileList3.url+that.ruleForm.fileList3.name,
+               img_per:that.ruleForm.fileList1[0].url,
+               img_xue:that.ruleForm.fileList2[1].url,
+               img_tea:that.ruleForm.fileList3[2].url, 
                }
           }).then(res=>{
             if(res.status==200){
