@@ -10,7 +10,7 @@
               </div>
               <div style="position: absolute; right: 10px;">
                 选择章节:
-                <el-select v-model="chap" filterable @change="getChap">
+                <el-select v-model="chapName" filterable @change="getChap">
                   <el-option
                     v-for="item in chapters"
                     :key="item.classId"
@@ -99,28 +99,32 @@ export default {
           classId: "1.1",
           note_address: "上海市普陀区金沙江路 1518 弄",
           name: '1.1算法',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         },
         {
           date: "2016-05-04",
           classId: "1.2",
           note_address: "上海市普陀区金沙江路 1517 弄",
           name: '1.2哈希树',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         },
         {
           date: "2016-05-01",
           classId: "1.3",
           note_address: "上海市普陀区金沙江路 1519 弄",
           name: '1.3二叉树',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         },
         {
           date: "2016-05-03",
           classId: "2.1",
           note_address: "上海市普陀区金沙江路 1516 弄",
           name: '2.1搜索树',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         }
       ],
       playerOptions: {
@@ -150,9 +154,12 @@ export default {
       },
       note_id: 0,
       video_id: 0,
+      chapName: '',
+      exerciseId: 3,
     };
   },
   mounted() {
+    console.log(this.$route.params)
     this.userId = this.$route.params.userId
     this.courseInfo = this.$route.params.courseInfo;
     this.chapters = this.$route.params.allClass
@@ -161,10 +168,12 @@ export default {
   },
   methods: {
     init(chap) {
+      console.log(this.chapters)
       this.chapters.forEach(item=>{
         if(item.classId == chap){
           this.note_id = item.note_address;
-          this.video_id = item.v_address
+          this.video_id = item.v_address;
+          this.chapName = item.name
         }
       })
       this.$axios.get('/video/info', {params:{video_id:this.video_id}}).then(res =>{
@@ -200,9 +209,14 @@ export default {
       this.init(this.chap)
     },
     toExe(level, courseId, chap) {
+      this.chapters.forEach(item=>{
+        if(item.classId == chap){
+          this.exerciseId = item.exercise_id;
+        }
+      })
       this.$router.push({
         name: "exercise",
-        params: { courseId: courseId, classId: chap, level: level }
+        params: { exerciseId: this.exerciseId, level: 0 ,courseId: this.classCard.courseId}//level
       });
     },
     onSubmit() {

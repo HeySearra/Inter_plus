@@ -5,9 +5,10 @@
         <el-aside width="300px" style="margin-left: 100px;">
           <cib :fclass-card="classCard" :join="join" :like="like" @changeJoin="changeJoin" @changeLike="changeLike"></cib>
         </el-aside>
-        <el-container>
+        <el-container><!--未登录用户看不到它-->
           <el-main style="margin-right: 100px;">
             <br />
+            <div v-if="isLog">
             <el-table
               :data="
                 tableData.filter(
@@ -48,7 +49,11 @@
                   >
                 </template>
               </el-table-column>
-            </el-table>
+            </el-table></div>
+            <div v-else>
+              <el-link style="margin: 0 auto; line-height: 20px; font-size: medium;" @click="toLogin">
+                您暂时不能浏览更详细的信息，点我去登录</el-link>
+            </div>
           </el-main>
         </el-container>
       </el-container>
@@ -79,33 +84,39 @@ export default {
           classId: "1.1",
           note_address: "上海市普陀区金沙江路 1518 弄",
           name: '1.1算法',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         },
         {
           date: "2016-05-04",
           classId: "1.2",
           note_address: "上海市普陀区金沙江路 1517 弄",
           name: '1.2哈希树',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         },
         {
           date: "2016-05-01",
           classId: "1.3",
           note_address: "上海市普陀区金沙江路 1519 弄",
           name: '1.3二叉树',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         },
         {
           date: "2016-05-03",
           classId: "2.1",
           note_address: "上海市普陀区金沙江路 1516 弄",
           name: '2.1搜索树',
-          v_address: '1'
+          v_address: '1',
+          exercise_id: 3
         }
       ],
       search: "",
       join: false,
       like: false,
+      isLog: true,
+      test_id: 0
     };
   },
   mounted(){
@@ -114,6 +125,12 @@ export default {
   },
   methods: {
     init(){
+      if(!localStorage.getItem('userId')){
+        this.isLog = false;
+      }
+      else{
+        this.isLog = true
+      }
       this.getCourseInfo()
     },
     handleEdit(index, row) {//瞎写的，要改
@@ -121,13 +138,13 @@ export default {
       this.$router.push({
         name: "note_edit",
         params: {
-          courseId: this.classCard.courseId, courseInfo: this.courseInfo, classId: row.classId,
+          courseId: this.classCard.courseId, courseInfo: this.classCard, classId: row.classId,
         allClass: this.tableData}
       });
     },
     toClassView(item) {
       let params = {
-        courseId: this.classCard.courseId, courseInfo: this.courseInfo, classId: item.classId, userId: this.userId,
+        courseId: this.classCard.courseId, courseInfo: this.classCard, classId: item.classId, userId: this.userId,
       allClass: this.tableData}
       this.$router.push({
         name: "classView",
@@ -148,12 +165,14 @@ export default {
           this.classCard.stuNum = i.who_joins.length;
           this.join = i.is_join == 1 ? true : false
           this.like = i.is_like == 1 ? true:false
+          this.test_id = res.data.test_id
           let j = 0
           i.classes.forEach(item=>{
             this.tableData[j].classId = item.class_index
             this.tableData[j].name = item.class_name
             this.tableData[j].v_address = item.video_id
             this.tableData[j].note_address = item.note_id
+            this.tableData[j].exercise_id = item.exercise_id
           })
         }
       }).catch(e =>{this.$message({message: e, type: 'error'})});
@@ -165,7 +184,10 @@ export default {
         course_id:this.classCard.courseId, op: op}).then(res=>{
           if(res.status == 0){
             this.join = !this.join
-            this.classCard.stuNum = res.data.new_join_num
+            this.classCard.stuNum = res.data.new_join_num//在这里强制进入课前练习还是在进入课时时进入课前练习
+            if(this.join === true){
+              this.$router.push({name: 'exercise', params: {exerciseId: this.test_id, level: 0, courseId: this.classCard.courseId}})
+            }
           } else {
             this.$message({message:'操作失败，请稍后重试', type: 'error'})
           }

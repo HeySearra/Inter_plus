@@ -49,12 +49,6 @@ const router = new Router({
       name: "classView",
       component: () => import("../views/classView.vue")
     },
-    // {
-    //   path: "allExercise/:courseId/:classId/:level",//"/allExercise/:classId/:zhang/:jie/:level",
-    //   name: "AllExercise",
-    //   component: () =>
-    //     import(/* webpackChunkName: "about" */ "../views/allExercise.vue")
-    // },
     {
       path: "/allExercise",
       name: "allExercise",
