@@ -9,9 +9,9 @@
       text-color="#fff"
       active-text-color="#ffd04b">
       <h1><a>家教</a></h1>
-      <el-menu-item index="1">主页</el-menu-item>
-      <el-menu-item index="2">课程</el-menu-item>
-      <el-menu-item index="3">作业</el-menu-item>
+      <el-menu-item index="1" @click="$router.push({path:'/index'});renew_active()">主页</el-menu-item>
+      <el-menu-item index="2" @click="$router.push({path:'/allClass'});renew_active()">课程</el-menu-item>
+      <el-menu-item index="3" @click="$router.push({path:'/exercise'});renew_active()">作业</el-menu-item>
       <el-menu-item index="4">视频管理</el-menu-item>
       <div class="user">
           <el-dropdown @click.native="dialogVisible = true">
