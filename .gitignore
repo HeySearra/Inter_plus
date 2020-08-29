@@ -1,7 +1,8 @@
 .DS_Store
 inter_plus/node_modules
 inter_plus/dist
-
+inter_plus/.vscode
+inter_plus/tests
 
 # Editor directories and files
 .idea
