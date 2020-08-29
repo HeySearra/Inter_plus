@@ -144,14 +144,11 @@ export default {
   },
   
   mounted(){
-    var that=this
-    this.$axios({
-      url:"user/user_info",
-      method:"get",
-      params:{
-        id:'123'
-        }
-        }).then(res=>{
+    let that=this
+     this.$axios.post('user/user_info',{
+        id:'123'},
+    {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(res=>{
           if(res.status==200){
             console.log(res);
             that.ruleForm.jpg.push({name:"头像",url:res.data.img});
@@ -231,19 +228,18 @@ handleRemove(file, fileList) {
       this.$refs[formName].validate(valid => {         
         if (valid) {
           var that=this
-          this.$axios({
-            url:'user/user_info',
-            method:'POST',
-             data: {
-               img:that.ruleForm.jpg[0].url,
-               name:that.ruleForm.name, 
+           this.$axios.post('',
+     this.qs.stringify({
+        img:that.ruleForm.jpg[0].url,
+               name:that.ruleForm.name,
                sex:parseInt(that.ruleForm.sex),
                school:that.ruleForm.school,
                major:that.ruleForm.region,
                grade:that.ruleForm.grade,
                birthday:that.ruleForm.date
-               }
-          }).then(res=>{
+      }),
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(res=>{
             if(res.status==200){
               if(res.data.status==0)
                 alert('修改成功')

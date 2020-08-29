@@ -27,9 +27,9 @@
                 @click="seeAll(node, data)">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+             <el-tooltip class="item" effect="dark" content="查看" placement="top">
               <el-button
-                icon="el-icon-edit"
+                icon="el-icon-search"
                 circle
                 @click="editAll(node, data)">
               </el-button>

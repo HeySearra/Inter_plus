@@ -283,20 +283,19 @@ handleRemove1(file, fileList) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
              var that=this
-          this.$axios({
-            url:'/user/post_teacher',
-            method:'POST',
-             data: {
-               id:"123",
-               degree:parseInt(that.ruleForm.degree),
+              this.$axios.post('/user/post_teacher',
+     this.qs.stringify({
+        id:0,
+        degree:parseInt(that.ruleForm.degree),
                graduate_school:that.ruleForm.graduate_school,
                teach_grade:parseInt(that.ruleForm.teach_grade),
                reason:that.ruleForm.reason,
                img_per:that.ruleForm.fileList1[0].url,
                img_xue:that.ruleForm.fileList2[1].url,
-               img_tea:that.ruleForm.fileList3[2].url, 
-               }
-          }).then(res=>{
+               img_tea:that.ruleForm.fileList3[2].url,
+      }),
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(res=>{
             if(res.status==200){
               if(res.data.status==0)
                 alert('提交成功')
