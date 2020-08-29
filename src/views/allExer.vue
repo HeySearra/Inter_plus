@@ -24,13 +24,10 @@ export default{
     var that=this
      ////复制 获取exerciselist
     ///获取课程id
-    this.$axios({
-      url:"/course/user_list",
-      method:"post",
-      data:{
+    this.$axios.post("/course/user_list",{
         id:0
-        }
-        }).then(res=>{
+        },{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}
+        ).then(res=>{
           if(res.status==200){
             console.log(res);
             for(var i=0;i<res.data.courses.length;i++){
@@ -40,17 +37,14 @@ export default{
             }
             })
     ///根据课程id获取以课时为单位的套卷信息 id list
-    for(var i=0;i<this.courses.length;i++){
-        this.$axios({
-      url:"/course/info",
-      method:"get",
-      params:{
+    for(let i=0;i<this.courses.length;i++){
+        this.$axios.get("/course/info", {params:{
         id:that.courses.id
         }
         }).then(res=>{
           if(res.status==200){
             console.log(res);
-            var li={name:that.courses[i].name,id:that.courses[i].id,classes:res.data.classes,test_id:res.data.test_id}
+            let li={name:that.courses[i].name,id:that.courses[i].id,classes:res.data.classes,test_id:res.data.test_id}
             that.list.push(li)
             }
             })

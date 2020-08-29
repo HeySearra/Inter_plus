@@ -71,7 +71,7 @@ const router = new Router({
           component: () => import("../views/manages/uploadVideo")
         },
         {
-          path: "uploadExe",
+          path: "uploadExe",///:courseId/:classId/:type
           name: "uploadExe",
           component: () => import("../views/manages/uploadExe")
         },
@@ -114,6 +114,12 @@ const router = new Router({
           path: "adminManageExe",
           name: "adminManageExe",
           component: () => import("../views/admin/adminManageExe")
+        }
+        ,
+        {
+          path: "adminViewExe/:exerciseId",
+          name: "adminViewMExe",
+          component: () => import("../views/admin/adminViewExe")
         }
       ]
     },

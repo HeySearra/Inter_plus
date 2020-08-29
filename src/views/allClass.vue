@@ -109,7 +109,7 @@ export default {
     },
     getSearchResult(keywords, item) {
       this.$axios.post("/course/list",{subject_id: item, key_words: keywords
-      })
+      },{headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
         .then(res => {
           console.log(res);
           if (res.status === 200) {
@@ -137,7 +137,7 @@ export default {
         });
     },
     getSubjects() {
-      this.$axios.post("/subject/list",).then(res => {
+      this.$axios.post("/subject/list",{},{headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(res => {
         if (res.status === 200) {
           this.classCategory = res.data.subject;
         }

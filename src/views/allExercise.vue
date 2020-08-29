@@ -250,140 +250,45 @@ export default {
     var that=this
     ////复制 获取exerciselist
    ///获取课程id
-    this.$axios({
-      url:"/course/user_list",
-      method:"post",
-      data:{
+        this.$axios.post('/course/user_list',
+     this.qs.stringify({
         id:0
-        }
-        }).then(res=>{
+      }),
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(res=>{
           if(res.status==200){
             console.log(res);
-            for(var i=0;i<res.data.courses.length;i++){
-              var course={name:res.data.courses[i].name,id:res.data.courses[i].id}
-              that.courses.push(course)
+            this.list=res.data.courses
             }
-            }
-            })
-    ///根据课程id获取以课时为单位的套卷信息 id list
-    for(var i=0;i<this.courses.length;i++){
-        this.$axios({
-      url:"/course/info",
-      method:"get",
-      params:{
-        id:that.courses.id
-        }
-        }).then(res=>{
-          if(res.status==200){
-            console.log(res);
-            var li={name:that.courses[i].name,id:that.courses[i].id,classes:res.data.classes,test_id:res.data.test_id}
-            that.list.push(li)
-            }
-            })
-    }
+        })
     //////粘贴 获取exerciselist
-    /////根据路由器获知当前时哪一套卷子 获取questions_id
-    for(i=0;i<that.exercises.length;i++){
-      if(that.exercises[i].id== this.$route.params.exerciseId){
-        that.question_ids=that.exercises[i].question_ids
-        that.name=that.exercises[i].name 
-      }
-      
-    }
-    //////直接跟据questionids跟新选项数据  复制
-   for(i=0;i<that.that.question_ids.length;i++){
-          this.$axios({
-            url:'exercise/question/info',
-             method:'GET',
-             params: {
-        id:that.question_ids[i].question_id
-        }
-          }).then(res=>{
+       this.$axios.post('exercise/question/info',{
+     params: {
+        id:this.$route.params.exerciseId
+        } ,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(res=>{
             if(res.status==200){
-              var dan={id:that.question_ids[i],title: res.data.text,difficulty:res.data.difficulty,tags:res.data.tags,solutions:res.data.solutions,stems:res.data.stems,show_solutions:false,right:[],wrong:[]}
+              for(var i=0;i<res.data.questions.length;i++){
+              var dan={id:res.data.questions[i].id,title: res.data.questions[i].text,difficulty:res.data.questions[i].difficulty,tags:res.data.questions[i].tags,solutions:res.data.questions[i].solutions,stems:res.data.questions[i].stems,show_solutions:false,right:[],wrong:[],selects:res.data.questions[i].choices,answers:res.data.questions[i].answers}
               if(res.data.question_type==1){
                 that.one.push(dan)
               }
-              if(res.data.question_type==2){ 
+              if(res.data.question_type==2){
                 that.input.push(dan)
               }
-              else if(res.data.question_type==3){     
+              else if(res.data.question_type==3){
                 that.more.push(dan)
               }
-            }
-            else if(res.data.question_type==4){              
+            else if(res.data.question_type==4){
                 that.maybe.push(dan)
               }
               else if(res.data.question_type==5){
                 that.textarea.push(dan)
               }
-          })
-          /////获取单选题选项
-     for(i=0;i<that.one.length;i++){
-          this.$axios({
-            url:'exercise/questions/choices',
-             method:'POST',
-             data: {
-        question_id:that.one.id
-        }
-          }).then(res=>{
-            if(res.status==200){
-              that.one[i].selects=res.data.choices
+              }
           }})
-    }   
-    ////获取多选题选项
-    for(i=0;i<that.more.length;i++){
-          this.$axios({
-            url:'exercise/questions/choices',
-             method:'POST',
-             data: {
-        question_id:that.more[i].id
-        }
-          }).then(res=>{
-            if(res.status==200){
-              that.more[i].selects=res.data.choices
-          }})
-    }
-    ////获取不定项选项
-       for(i=0;i<that.maybe.length;i++){
-          this.$axios({
-            url:'exercise/questions/choices',
-             method:'POST',
-             data: {
-        question_id:that.maybe[i].id
-        }
-          }).then(res=>{
-            if(res.status==200){
-              that.maybe[i].selects=res.data.choices
-          }})
-    }
-    ////获取填空题答案
-      for(i=0;i<that.input.length;i++){
-          this.$axios({
-            url:'exercise/get_blanks',
-             method:'POST',
-             data: {
-        question_id:that.input[i].id
-        }
-          }).then(res=>{
-            if(res.status==200){
-              that.input.answers=res.data.answers
-          }})
-    }
-    ////获取主观题答案
-      for(i=0;i<that.textarea.length;i++){
-          this.$axios({
-            url:'exercise/get_blanks',
-             method:'POST',
-             data: {
-        question_id:that.textarea[i].id
-        }
-          }).then(res=>{
-            if(res.status==200){
-              that.textarea.answers=res.data.answers
-          }})
-    }
-    }
+
     //////粘贴
  },
   methods: {

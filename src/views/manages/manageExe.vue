@@ -1,425 +1,320 @@
 <template>
-  <div>
-    <el-row style="margin-top:30px" > 
-      <el-col :span="20" style="background:white">
-        <el-container>
-          <el-main>
-            <h1 style="text-align:left">查看课程课时的习题  选择课程：<span>
-                   <el-dropdown style="margin-top:30px" @command="handleCommand">
-          <span class="el-dropdown-link">
-            {{ click }}<i class="el-icon-arrow-down el-icon--right"></i>
+  <div class="custom-tree-container">
+    <div class="block">
+      <div style="margin:25px 0px;">
+        搜索：<el-input class="tree-input"
+          placeholder="输入关键字进行过滤"
+          v-model="filterText">
+        </el-input>
+        <span style="float: right">
+        <el-button type="warning" @click="setCheckedNodes">全选</el-button>
+        <el-button type="primary" @click="resetChecked">全不选</el-button>
+        <el-button type="danger" @click="getCheckedNodes">批量删除</el-button></span>
+      </div>
+      <el-tree class="my-tree"
+        :data="data"
+        show-checkbox
+        node-key="id"
+        :filter-node-method="filterNode"
+        ref="tree"
+
+        >
+        <span class="custom-tree-node" slot-scope="{ node, data }">
+          <span>{{ node.label }}</span>
+          <span>
+            <el-tooltip class="item" effect="dark" content="查看" placement="top">
+              <el-button
+              v-show="data.show_name"
+                icon="el-icon-search"
+                circle
+                @click="seeAll(node, data)">
+              </el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="新添习题" placement="top">
+              <el-button
+              v-show="data.show_edit"
+                icon="el-icon-edit"
+                circle
+                @click="edit(node, data)">
+              </el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="删除" placement="top">
+              <el-button
+              v-show="data.show_del"
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              @click="() => remove(node, data)">
+              </el-button>
+            </el-tooltip>
           </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="item in items" :key="item" :command="item">
-              {{ item.name }}</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </el-dropdown >
-              </span> 
-              <span  v-if="show_class">
-                选择课时：
-                <el-dropdown style="margin-top:30px" @command="handleCommand_class">
-          <span class="el-dropdown-link">
-            {{ click_class }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="item in items_class" :key="item" :command="item">
-              {{ item.className }}</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </el-dropdown>
-              </span>
-               <span  v-if="show_exercise">
-                选择套卷：
-                <el-dropdown style="margin-top:30px" @command="handleCommand_exercise">
-          <span class="el-dropdown-link">
-            {{ click_exercise }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command="0">课前习题</el-dropdown-item>
-            <el-dropdown-item :command="1">课后习题</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-              </span>
-               <el-button  v-if="show_question" type="danger" @click="del_exercise()" plain>删除本套卷子</el-button> 
-              </h1>
-            <el-divider></el-divider>
-            <div v-show="show_question">
-                 <div v-show="one.length > 0">
-              <h3>单选题</h3>
-              <ul v-for="(item, index) in one" :key="index">
-                <li>
-                      <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>   </p>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                    </li>
-                  </ul>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                       <div  v-show="item.show_solutions">
-   <el-divider content-position="left">鸭你来看提示啦</el-divider>
-                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
-                  </div>
-                  <el-radio-group
-                    v-model="item.selected"
-                    v-for="(select, ind) in item.selects"
-                    :key="ind"
-                  >
-                    <el-radio :label="select.name">{{ select.name }}</el-radio>
-                  </el-radio-group>
-                     <el-divider content-position="left">本题知识点</el-divider>
-                  <ul  v-for="(it,ind) in item.tags" :key="ind">
-                    <li>
-                      <p>{{it}}</p>
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
-                </li>
-              </ul>
-            </div>
-            <div v-show="more.length > 0">
-              <h3>多选题</h3>
-              <ul v-for="(item, index) in more" :key="index">
-                <li>
-                   <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button></p>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                    </li>
-                  </ul>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                       <div  v-show="item.show_solutions">
-   <el-divider content-position="left">鸭你来看提示啦</el-divider>
-                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
-                  </div>
-                  <el-checkbox-group
-                    v-model="item.selected"
-                    v-for="(select, ind) in item.selects"
-                    :key="ind"
-                  >
-                    <el-checkbox :label="select.name">{{select.name}}</el-checkbox>
-                  </el-checkbox-group>
-                                      <el-divider content-position="left">本题知识点</el-divider>
-                  <ul  v-for="(it,ind) in item.tags" :key="ind">
-                    <li>
-                      <p>{{it}}</p>
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
-                </li>
-              </ul>
-            </div>
-             <div v-show="maybe.length > 0">
-              <h3>不定项选择题</h3>
-              <ul v-for="(item, index) in maybe" :key="index">
-                <li>
-                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button> </p>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                    </li>
-                  </ul>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                       <div  v-show="item.show_solutions">
-   <el-divider content-position="left">鸭你来看提示啦</el-divider>
-                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
-                  </div>
-                  <el-checkbox-group
-                    v-model="item.selected"
-                    v-for="(select, ind) in item.selects"
-                    :key="ind"
-                  >
-                    <el-checkbox :label="select.name">{{select.name}}</el-checkbox>
-                  </el-checkbox-group>
-                                      <el-divider content-position="left">本题知识点</el-divider>
-                  <ul  v-for="(it,ind) in item.tags" :key="ind">
-                    <li>
-                      <p>{{it}}</p>
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
-                </li>
-              </ul>
-            </div>
-            <div v-show="input.length > 0">
-              <h3>填空题</h3>
-              <ul v-for="(item, index) in input" :key="index">
-                <li>
-                     <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button> </p>
-                  <ul v-for="(it,ind) in item.stems" :key="ind"> 
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                    </li>
-                  </ul>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                       <div  v-show="item.show_solutions">
-   <el-divider content-position="left">鸭你来看提示啦</el-divider>
-                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
-                  </div>
-                  <ul v-for="(it,ind) in item.answers" :key="ind">
-                    <li>
-                       <el-input
-                    placeholder="请输入内容"
-                    v-model="it.input"
-                    clearable
-                  ></el-input>
-                    </li>
-                  </ul>
-                                      <el-divider content-position="left">本题知识点</el-divider>
-                  <ul  v-for="(it,ind) in item.tags" :key="ind">
-                    <li>
-                      <p>{{it}}</p>
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
-                </li>
-              </ul>
-              <h3>主观题</h3>
-              <ul v-for="(item, index) in textarea" :key="index">
-                <li>
-                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button> </p>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                    </li>
-                  </ul>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
-                    <li>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                       <div  v-show="item.show_solutions">
-   <el-divider content-position="left">鸭你来看提示啦</el-divider>
-                  <ul  v-for="(it,ind) in item.solutions" :key="ind">
-                    <li>
-                      <p v-show="it.text!=null">{{it.text}}</p>
-                      <img v-show="it.img!=null" :src="it.img">
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">好啦好啦快去写题 下次要自己做呦</el-divider>
-                  </div>
-                  <el-input
-                    type="textarea"
-                    :rows="2"
-                    placeholder="请输入内容"
-                    v-model="item.answers[0].textarea"
-                    clearable
-                  ></el-input>
-                                      <el-divider content-position="left">本题知识点</el-divider>
-                  <ul  v-for="(it,ind) in item.tags" :key="ind">
-                    <li>
-                      <p>{{it}}</p>
-                    </li>
-                  </ul>
-                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider> 
-                </li>
-              </ul>
-            </div>
-            </div>
-          </el-main>
-        </el-container>
-      </el-col>
-      <el-col :span="4"><div class="grid-content "></div></el-col>
-    </el-row>
+        </span>
+      </el-tree>
+    </div>
+     <el-dialog>
+         <el-dialog title="登陆" :visible.sync="dialog" center :append-to-body='true' :lock-scroll="false" width="30%">
+           <p>sada</p>
+      </el-dialog>
+     </el-dialog>
   </div>
 </template>
+
 <script>
-export default {
-  data() {
-    return {
-      fileList:[],
-      show_class:false, 
-         items:[{name:"sad",id:"123",classes:[{className:"sad",classId:"123"}]},{name:"sad",id:"123",classes:[{className:"sazzzzzzd",classId:"123"}]}],
-    click:"请选择课程",
-    course_id:"",
-      class_id:"",
-    exercise_id:0,
-    show_exercise:false,
-     show_question:false,
-       items_class:[{className:"sad",classId:"123"},{className:"saddd",classId:"123"}],
-    click_class:"请选择课程",
-    click_exercise:"请选择习题",
-      name:"sda",
-         one:[ 
-        { id:"",title: "题目描述", selects: [{name:"红色"}],selected:"",difficulty:0,stems:[{img:null,text:"题干描述",type:0}],show_solutions:false,solutions:[{img:"ss",text:"dasd",type:1,if_last:1}],tags:["asdas","dasda"]},
-      ],
-      more: [
-        { id:"",title: "你喜欢", selects: [{name:"红色"}] ,selected: ["红色"], difficulty:0},
-         ],
-      maybe: [
-         { id:"",title: "你喜欢", selects: [{name:"红色"}] ,selected: ["红色"], difficulty:0},
-        ],
-      input: [
-        { id:"",title: "你喜欢", answers:[{answer:"",input: ["fsdf"]},{answer:"",input: ["fsdf"]}],difficulty:0},
-         ],
-      textarea: [
-        { id:"", title: "你喜欢",answers:[{answer:"", textareas:""}],difficulty:0},
-        ]
-    };
-  }
-  ,
-  
-  mounted(){
-       var that=this
+  export default {
+    name: 'manageExe',
+
+    data() {
+      const data = [{
+          id: 20,
+          label: '课程1-1',
+        show_name:true,
+        show_del:false,
+           children: [
+           {
+          id: 20,
+          label: '课前习题',
+          is_exer:true,
+        show_name:true,
+        show_del:false,
+        },
+    {
+          id: 4,
+          label: '课时 1-1',
+        show_name:true,
+        show_edit:true,
+        show_del:false,
+          children: [{
+            id: 9,
+            label: '一般习题 1-1-1',
+        show_name:true,
+        show_del:true,
+          },
+          {
+            id: 12,
+            label: '一般习题 1-1-1',
+        show_name:true,
+        show_del:true,
+          }]
+        }
+      ]
+     }];
+      return {
+        courseId:0,
+        classId:0,
+        type:-1,
+        filterText: '',
+        data: JSON.parse(JSON.stringify(data)),
+        leaf_prop:{
+          label: 'name',
+          id: 'id',
+          isLeaf:'leaf'
+        },
+        id: 0,
+        dialog:false
+      }
+    },
+    watch: {
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      }
+    },
+    mounted(){
+    this.$axios.post('',
+     this.qs.stringify({
+        id:0
+      }),
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(res=>{
+          if(res.status==200){
+            console.log(res);
+            for(var i=0;i<res.data.courses.length;i++){
+              var dd=res.data.courses[i]
+              var course={id:dd.id,
+              label:dd.course,
+               show_name:true,
+              show_del:false,
+              children:[
+                  {
+          id: dd.pre_exercise,
+          label: '课前习题',
+          is_exer:true,
+        show_name:true,
+        show_del:false,
+        },
+              ]
+              }
+              for(var j=0;j<dd.classes.length;j++){
+                var cla=dd.classes[j]
+                course.children.push(
+  {
+          id: cla.id,
+          label: cla.class_name,
+        show_name:true,
+        show_edit:true,
+        show_del:false,
+          children: [{
+            id: cla.exercise_id,
+            label: '一般习题',
+        show_name:true,
+        show_del:true,
+          },
+          {
+            id: cla.exercise_easy_id,
+            label: '简单习题',
+        show_name:true,
+        show_del:true,
+          },
+          {
+            id: cla.exercise_middle_id,
+            label: '困难习题',
+        show_name:true,
+        show_del:true,
+          }
+          ,
+          {
+            id: cla.exercise_hard_id,
+            label: '简单习题',
+        show_name:true,
+        show_del:true,
+          }]
+        }
+
+                )
+              }
+              this.data.data.push(course)
+            }
+            }
+        })
+
+  },
+    methods: {
+      loadNode(node, resolve){
+        if(node.level == 0){//在这里请求课程
+          this.$axios.post('/course/list', {author_id: localStorage.getItem('userId')}).then(res=>{
+            if(res.status == 200){
+              let treeData = []
+              res.data.course.forEach(i =>{
+                treeData.push({
+                  name: i.name,
+                  id: i.id,
+                  leaf: false
+                })
+                this.id = i.id
+              })
+              this.id += 1
+              return resolve(treeData)
+            }
+          }).catch(e => {this.$message({message:e, type: 'error'})})
+          //return resolve([{label: this.data[0].label}, {label: this.data[1].label}, {label:this.data[2].label}])
+        }
+        else if(node.level == 1){//在这里请求课时
+          this.$axios.get('/course/info', {params:{id: node.data.id}}).then(res=>{
+            if(res.status == 200){
+              let sonData = []
+              res.data.className.forEach(i =>{
+                sonData.push({
+                  id: this.id++,
+                  name: i,
+                  courseName: res.data.name,
+                  video_ids:res.data.video_ids,
+                  leaf: true
+                })
+              })
+              return resolve(sonData)
+            }
+          }).catch(e => {this.$message({message:e, type: 'error'})})
+        }
+      },
+      seeAll(node, data){
+        if(node.level ==1){//查看课程
+          console.log('edit course'+data.id)
+          this.$router.push({name: 'course_info', params: {courseId: data.id}})
+        }
+        else if(node.level == 2&&!(data.is_exer==true)){//查看课时
+          console.log('edit single class => pop up dialogue for user to edit'+data.id)
+          //这里需要请求课程详细信息，或许懒加载时已请求
+          this.$router.push({name: 'classView', params: {courseId: node.parent.data.id, classId: data.id,
+            userId: localStorage.getItem('userId'), video_ids: [], courseName:data.courseName}})
+        }
+        else{
+           this.$router.push({
+        path:"/manage/adminViewExe/"+data.id})
+       }
+      },
+      edit(node, data){
+        this.dialog=true
+        this.aa=node,//
+        this.aa=data/////
+      },
+      remove(node, data) {
+        const parent = node.parent;
+        const children = parent.data.children || parent.data;
+        const index = children.findIndex(d => d.id === data.id);
+        var that=this
     this.$axios({
-      url:"http://127.0.0.1:8000/user/courses_list_as_teacher",
+      url:"exericse/del_exercise",
       method:"post",
       data:{
-        id:0
-      }
+        exercise_id:data.id
+        }
         }).then(res=>{
           if(res.status==200){
             console.log(res);
-            that.items=res.data.courses
+            if(res.data.status==0)
+            children.splice(index, 1);
+            else
+            that.$message("删除失败")
             }
             })
- },
-  methods: {
-    addQuestion(question_type){
-      if(question_type==1){
-        this.one.push(  {input:"",question_type:1, id:"",title: "", selects: [],selected:"",difficulty:0,stems:[],tags:[],tag:""},)
-      }
-      else if(question_type==2){
-           this.input.push(  {input:"",question_type:2, id:"",title: "",answers:[],difficulty:0,stems:[],tags:[],tag:""},)
- /////待定
-      }
-      else if(question_type==3){
-           this.more.push(  {input:"",question_type:3, id:"",title: "", selects: [],selected:[],difficulty:0,stems:[],tags:[],tag:""},)
 
+      },
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
+      resetChecked() {
+        this.$refs.tree.setCheckedKeys([]);
+      },
+      setCheckedNodes() {
+        this.$refs.tree.setCheckedNodes(this.data);
+      },
+      getCheckedNodes() {
+        let datas = this.$refs.tree.getCheckedNodes()
+        datas.forEach(i =>{
+          let node = this.$refs.tree.getNode(i)
+          if(node.isLeaf&&node.level==4)
+          this.remove(node, node.data)
+        })
+        this.resetChecked()
+      },
+      changeVisible(val){
+        this.dialog = val
       }
-      else if(question_type==4){
-           this.maybe.push(  {input:"",question_type:4, id:"",title: "", selects: [],selected:[],difficulty:0,stems:[],tags:[],tag:""},)
-      }
-      else if(question_type==5){
-           this.textarea.push(  {input:"",question_type:5, id:"",title: "", answers:[{answer:""}],difficulty:0,stems:[],tags:[],tag:""},)
-    ////待定 
-    }
-    },
-    submit(){
-
-    },
-      dele(question_type,index){
-      if(question_type==1){
-        this.one.splice(index,1)
-      }
-      else if(question_type==2){
-        this.input.splice(index,1)
-      }
-      else if(question_type==3){
-        this.more.splice(index,1)
-      }
-      else if(question_type==4){
-        this.maybe.splice(index,1)
-      }
-      else if(question_type==5){
-        this.textarea.splice(index,1)
-      }
-    },
-    handleCommand(command) {
-      if(this.show_class==true){
-        this.show_question=false
-        this.show_exercise=false
-        this.click_class="请选择课时"
-        this.click_exercise="请选择习题"
-      } 
-      else{
-      this.show_class=true
-      }
-       this.click = command.name;
-      this.course_id=command.id
-      this.items_class=command.classes
-    },
-    handleCommand_class(command) {
-       if(this.show_exercise==true){
-        this.show_question=false
-        this.click_exercise="请选择习题"
-      } 
-      else{
-      this.show_exercise=true
-      }
-      this.click_class = command.className;
-      this.class_id=command.classId 
-    },
-     handleCommand_exercise(command) {
-       if(command==0)
-      this.click_exercise = "课前习题";
-      else (command==1)
-      this.click_exercise = "课后习题";
-      this.show_question=true 
-      this.exercise_id=command.
-      alert(this.exercise_id)    
-    },
-    easy() {},
-    middle() {},
-    hard() {},
-    del_exercise(){
 
     }
-  }
-};
+  };
 </script>
-<style>
-li {
-  list-style: none;
-}
-.el-row {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-.el-col {
-  border-radius: 4px;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg {
-  padding: 10px 0;
-}
-.center-children {
-  text-align: center;
-}
-</style>
 
+<style>
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    padding-right: 8px;
+  }
+  div.block{
+    margin-right: 16.7%;
+  }
+
+  .my-tree .el-tree-node__content {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+  }
+  .tree-input{
+    width: 30%;
+  }
+</style>

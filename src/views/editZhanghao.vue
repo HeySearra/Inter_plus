@@ -87,13 +87,13 @@
     },
   mounted(){
     var that=this
-    this.$axios({
-      url:"/user/user_info",
-      method:"GET",
-      params:{
+     this.$axios.post('/user/user_info',{
+     params:{
         id:'0'
         }
-        }).then(res=>{
+     ,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(res=>{
           if(res.status==200){
             console.log(res);
             that.ruleForm.email=res.data.email;
@@ -106,16 +106,15 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
              var that=this
-          this.$axios({
-            url:'user/user_account',
-            method:'POST',
-             data: {
-               id:"123",
+              this.$axios.post('user/user_account',
+     this.qs.stringify({
+         id:0,
                pass_old:that.ruleForm.pass_old,
                pass_new:that.ruleForm.pass,
                email:that.ruleForm.email
-               }
-          }).then(res=>{
+      }),
+      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      .then(res=>{
             if(res.status==200){
               if(res.data.status==0)
                 alert('修改成功')
