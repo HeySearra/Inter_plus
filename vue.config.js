@@ -5,5 +5,6 @@ module.exports = {
       warnings: true,
       errors: true,
     },
+    proxy:"127.0.0.1:8000/",
   },
 };

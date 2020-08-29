@@ -1,17 +1,21 @@
 <template>
   <el-row>
-  <el-col :span="5"><div class="grid-content"></div></el-col>
-  <el-col :span="14">
-    <el-container>
-  <el-header>
-    <el-menu default-active="2" class="el-menu-demo" mode="horizontal" >
-  <el-menu-item index="1">资料设置</el-menu-item>
-   <el-menu-item index="2">账号设置</el-menu-item>
-    <el-menu-item index="3">申请成为老师</el-menu-item>
-</el-menu>
-  </el-header>
-  <el-main>
-    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-col :span="5"><div class="grid-content"></div></el-col>
+    <el-col :span="14" style="background:white">
+      <el-container>
+        <div> 
+        <el-menu default-active="/user/editAccount" class="el-menu-demo" mode="horizontal" router>
+          <el-menu-item index="/user/edit">资料设置</el-menu-item>
+          <el-menu-item index="/user/editAccount">账号设置</el-menu-item>
+          <el-menu-item index="/user/editTeacher">申请成为老师</el-menu-item>
+        </el-menu>
+      </div>
+      <el-main>
+         
+     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+   <el-form-item label="旧密码" prop="pass_old">
+    <el-input type="password" v-model="ruleForm.pass_old" autocomplete="off"></el-input>
+  </el-form-item>
   <el-form-item label="密码" prop="pass">
     <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
   </el-form-item>
@@ -21,19 +25,18 @@
    <el-form-item label="常用邮箱" prop="email">
     <el-input v-model="ruleForm.email"></el-input>
   </el-form-item>
-   <el-form-item label="电话" prop="phone">
-    <el-input v-model="ruleForm.phone"></el-input>
-  </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
   </el-form-item>
 </el-form>
-  </el-main>
-</el-container>
-    
+      </el-main>
+      <el-footer></el-footer>
+    </el-container>
   </el-col>
+   <el-col :span="5"><div class="grid-content"></div></el-col>
 </el-row>
 </template>
+
 <script>
   export default {
     data() {
@@ -58,15 +61,18 @@
       };
       return {
         ruleForm: {
+          pass_old:"",
           pass: '',
           checkPass: '',
           email:"",
-           phone:"",
         },
         rules: {
           pass: [
               { required: true, message: '密码不能为空', trigger: 'blur' },
             { validator: validatePass, trigger: 'blur' }
+          ],
+          pass_old: [
+              { required: true, message: '密码不能为空', trigger: 'blur' },
           ],
           checkPass: [
               { required: true, message: '确认密码不能为空', trigger: 'blur' },
@@ -75,19 +81,48 @@
          email:[
             { required: true, message: '邮箱不能为空', trigger: 'blur' },
              { type: 'email', required: true, message: '邮箱必须合法', trigger: 'change' }
-          ],
-        phone:[
-            { required: true, message: '电话不能为空', trigger: 'blur' },
-             { required: true, validator: checkPhoneNumber, trigger: 'blur' }
-          ],
+          ]
         }
       };
     },
+  mounted(){
+    var that=this
+    this.$axios({
+      url:"/user/user_info",
+      method:"GET",
+      params:{
+        id:'0'
+        }
+        }).then(res=>{
+          if(res.status==200){
+            console.log(res);
+            that.ruleForm.email=res.data.email;
+            }
+            })
+            }
+            ,
     methods: {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+             var that=this
+          this.$axios({
+            url:'user/user_account',
+            method:'POST',
+             data: {
+               id:"123",
+               pass_old:that.ruleForm.pass_old,
+               pass_new:that.ruleForm.pass,
+               email:that.ruleForm.email
+               }
+          }).then(res=>{
+            if(res.status==200){
+              if(res.data.status==0)
+                alert('修改成功')
+              else
+                alert('未知错误')
+            }
+          })
           } else {
             console.log('error submit!!');
             return false;

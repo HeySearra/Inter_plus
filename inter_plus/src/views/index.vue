@@ -1,95 +1,192 @@
 <template>
-<div>
-  <el-container>
-    <el-aside width="300px">
-      <lb :title="'学科分类'" type="subject"></lb>
-    </el-aside>
-    <el-main>
-      <class-carousel></class-carousel>
-    <!-- <swiper v-if="slide.length > 1" ref="mySwiper" :options="swiperOption" class="swiper-box">
-      <swiper-slide class="swiper-slide" v-for="(item,index) in slide" :key="index">
-          我是第{{item}}个轮播图
-      </swiper-slide>
-      <div class="swiper-pagination" slot="pagination"></div>
-      <div @click="prev" class="swiper-button-prev" slot="button-prev"></div>
-      <div @click="next" class="swiper-button-next" slot="button-next"></div>
-    </swiper> -->
-    </el-main>
-    <el-aside width="300px">
-      <lb :title="'我的课程'" type="course"></lb>
-    </el-aside>
-  </el-container>
-    <el-container type="flex" justify="space-around">
-      <el-col :span="6"><lb :title="'我的课程'" type="course"></lb></el-col>
-      <el-col :span="6"><lb :title="'我的课程'" type="course"></lb></el-col>
-      <el-col :span="6"><lb :title="'我的课程'" type="course"></lb></el-col>
+  <div>
+    <el-container>
+      <el-aside width="250px" style="margin-left: 100px;">
+        <lb :title="'学科分类'" type="subject" :list="subject_list"></lb>
+      </el-aside>
+      <el-main>
+        <class-carousel></class-carousel>
+      </el-main>
+      <el-aside width="250px" style="margin-right: 100px;">
+        <lb :title="'我的课程'" type="course" :list="my_course_list"></lb>
+      </el-aside>
     </el-container>
-</div>
+    <el-container type="flex" justify="space-around">
+      <el-col :span="8"
+        ><div style="width: 250px; margin: 0 auto;">
+          <lb
+            :title="'最新更新排行榜'"
+            type="course"
+            :list="new_course_list"
+          ></lb></div
+      ></el-col>
+      <el-col :span="8"
+        ><div style="width: 250px; margin: 0 auto;">
+          <lb
+            :title="'最多同学排行榜'"
+            type="course"
+            :list="join_course_list"
+          ></lb></div
+      ></el-col>
+      <el-col :span="8"
+        ><div style="width: 250px; margin: 0 auto;">
+          <lb
+            :title="'最多点赞排行榜'"
+            type="course"
+            :list="like_course_list"
+          ></lb></div
+      ></el-col>
+    </el-container>
+  </div>
 </template>
 
 <script>
-var vm = null;
+//轮播走马灯的获取
 export default {
-  name: 'index',
-  created () {
-    vm = this
-  },
-data() {
+  name: "index",
+  data() {
     return {
-      slide: [1, 2, 3, 4, 5],
-      //设置属性
-    }
+      course_list: [
+        {
+          courseId: 1,
+          class_img:
+            "https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"
+        },
+        {
+          courseId: 2,
+          class_img: ""
+        },
+        {
+          courseId: 3,
+          class_img: ""
+        },
+        {
+          courseId: 4,
+          class_img: ""
+        }
+      ],
+      subject_list: [
+        {
+          id: 1,
+          name: "语文"
+        }
+      ],
+      my_course_list: [],
+      new_course_list: [],
+      join_course_list: [],
+      like_course_list: []
+    };
   },
+  computed: {},
   mounted() {
-    console.log('Current Swiper instance object', this.swiper)
-    //this.swiper.slideTo(0, 1000, false)
+    this.init();
   },
   methods: {
-    prev() {
-      this.swiper.slidePrev();
+    init() {
+      //this.getUserInfo()
+      this.getSubjects();
+      this.getMyCourses();
+      this.getNewest();
+      this.getJoin();
+      this.getLike();
     },
-    next() {
-      this.swiper.slideNext()
+    getSubjects() {
+      this.$axios.post("/subject/list").then(res => {
+        if (res.status === 200) {
+          this.subject_list = res.data.subject;
+        }
+      });
+    },
+    getMyCourses() {
+      this.$axios.post("/course/user_list",{
+          id: 0
+      }).then(res => {
+        if (res.status === 200) {
+          //this.course_list = res.data.courses;
+          let j = 0;
+          for (let i in res.data.courses) {
+            this.my_course_list[j].id = i.id;
+            this.my_course_list[j].name = i.name;
+            j++;
+          }
+        }
+      });
+    },
+    getNewest() {
+      this.$axios.post("/course/list",{
+          new: 1
+      }).then(res => {
+        if (res.status === 200) {
+          console.log(res.data);
+          let j = 0;
+          for (let i in res.data.courses) {
+            this.new_course_list[j].id = i.id;
+            this.new_course_list[j].name = i.name;
+            j++;
+          }
+        }
+      });
+    },
+    getJoin() {
+      this.$axios.post("/course/list",{
+          join: 1
+      }).then(res => {
+        if (res.status === 200) {
+          console.log(res.data);
+          let j = 0;
+          for (let i in res.data.courses) {
+            this.join_course_list[j].id = i.id;
+            this.join_course_list[j].name = i.name;
+            j++;
+          }
+        }
+      });
+    },
+    getLike() {
+      this.$axios.post("/course/list",{
+          like: 0
+      }).then(res => {
+        if (res.status === 200) {
+          console.log(res.data);
+          let j = 0;
+          for (let i in res.data.courses) {
+            this.like_course_list[j].id = i.id;
+            this.like_course_list[j].name = i.name;
+            j++;
+          }
+        }
+      });
     }
   }
-}
+};
 </script>
 
-
-<style>
-@import url("//unpkg.com/element-ui@2.13.1/lib/theme-chalk/index.css");
-  .swiper-slide {
-  width: 100%;
-  height: 500px;
-  line-height:500px;
-  font-size: 50px;
-  text-align: center;
-  background-color: rosybrown;
+<style scoped>
+.el-aside {
+  color: #333;
+  padding-top: 40px;
+  padding-bottom: 30px;
 }
-  .el-aside {
-    color: #333;
-    padding-top:50px;
-    padding-bottom:30px;
-  }
-  
-  .el-main {
-    color: #333;
-    padding-top:50px;
-  }
-  
-  .mid {
-    margin-bottom: 40px;
-    width:1100px;
-    margin:0 auto;
-  }
-  
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
-  
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
 
+.el-main {
+  color: #333;
+  padding-top: 40px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.mid {
+  margin-bottom: 40px;
+  width: 1100px;
+  margin: 0 auto;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+  line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+  line-height: 320px;
+}
 </style>
