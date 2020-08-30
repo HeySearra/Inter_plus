@@ -15,12 +15,36 @@ import manage from "./components/Manage.vue";
 import lb from "./components/list_block";
 import 'element-ui/lib/theme-chalk/index.css';
 
-axios.defaults.baseURL='http://127.0.0.1:8000'
-axios.defaults.headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
+const Axios = axios.create({
+  //请求接口
+  baseURL:"http://127.0.0.1:8000'",
+  //超时设置
+  timeout:5000,
+  //请求头设置
+})
+Axios.interceptors.request.use(config => {
+    // 设置以 form 表单的形式提交参数，如果以 JSON 的形式提交表单，可忽略
+    // if(config.method  === 'post'){
+    //     // JSON 转换为 FormData
+    //     const formData = new FormData()
+    //     Object.keys(config.data).forEach(key => formData.append(key, config.data[key]))
+    //     config.data = formData
+    // }
+  config.headers.contentType = 'application/x-www-form-urlencoded; charset=UTF-8'
+    if (localStorage.token) {
+        config.headers.Authorization = 'JWT ' + localStorage.token
+    }
+    return config
+},error =>{
+    this.$message({message:'参数错误',type:'error'})
+    return Promise.reject(error.response.data)
+})
+
+Vue.prototype.axios = Axios
 
 Vue.use(Element);
-Vue.prototype.$axios = axios;
-
+Vue.use(mavonEditor);
+Vue.use(VueVideoPlayer);
 Vue.component("NavBar", NavBar);
 Vue.component("cib", cib);
 Vue.component("classCardSp", classCardSp);
@@ -29,9 +53,6 @@ Vue.component("manage", manage);
 Vue.component("lb", lb);
 
 Vue.config.productionTip = false;
-
-Vue.use(mavonEditor);
-Vue.use(VueVideoPlayer);
 
 new Vue({
   router,

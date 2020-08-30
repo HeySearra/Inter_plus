@@ -79,8 +79,11 @@ export default {
       }
     };
     let validatePass = (rule, value, callback) => {
+      let reg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d){6,18}$/;
       if (value === "") {
         callback(new Error("请输入密码"));
+      } else if (!reg.test(value)) {
+        callback(new Error("密码必须包含数字、字母，长度大于6小于18"))
       } else {
         if (this.registerForm.checkPass !== "") {
           this.$refs.registerForm.validateField("checkPass");
