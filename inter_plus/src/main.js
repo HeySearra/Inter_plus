@@ -40,7 +40,7 @@ Axios.interceptors.request.use(config => {
     return Promise.reject(error.response.data)
 })
 
-Vue.prototype.axios = Axios
+Vue.prototype.$axios = Axios
 
 Vue.use(Element);
 Vue.use(mavonEditor);
