@@ -9,55 +9,38 @@
   </div>
 </template>
 <script>
-import allExer from "../components/allExer";
+import allExer from "@/components/allExer";
 export default{
-  components: {
+  components:{
     allExer
   },
   data() {
     return {
       courses:[],
-     list:[{name:"sd",id:"123",test_id:"123",classes:[{class_name:"123sad",exercise_id:123,exercise_easy_id:123,exercise_middle_id:234,exercise_hard_id:234}]}]
+     list:  [{name:"sd",id:"123",test_id:"123",classes:[{class_name:"123sad",exercise_id:123,exercise_easy_id:123,exercise_middle_id:234,exercise_hard_id:234}]}]
     };
   },
   mounted(){
-    var that=this
-     ////复制 获取exerciselist
-    ///获取课程id
-    this.$axios({
-      url:"/course/user_list",
-      method:"post",
-      data:{
+    this.$axios.post('/course/user_list',
+     {
         id:0
-        }
-        }).then(res=>{
+      },
+      {headers: {'X-CSRFToken': this.getCookie('csrftoken')}})
+      .then(res=>{
           if(res.status==200){
             console.log(res);
-            for(var i=0;i<res.data.courses.length;i++){
-              var course={name:res.data.courses[i].name,id:res.data.courses[i].id}
-              that.courses.push(course)
+            this.list=res.data.courses
             }
-            }
-            })
-    ///根据课程id获取以课时为单位的套卷信息 id list
-    for(var i=0;i<this.courses.length;i++){
-        this.$axios({
-      url:"/course/info",
-      method:"get",
-      params:{
-        id:that.courses.id
-        }
-        }).then(res=>{
-          if(res.status==200){
-            console.log(res);
-            var li={name:that.courses[i].name,id:that.courses[i].id,classes:res.data.classes,test_id:res.data.test_id}
-            that.list.push(li)
-            }
-            })
-    }
-    //////粘贴 获取exerciselist
-            },
-            }
+        })
+  },
+  methods:{
+    getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
+    },
+  }
+}
 ;
 </script>
 <style>
