@@ -1,21 +1,15 @@
 <template>
   <div>
-    <el-row style="margin-top:30px">
-      <el-col :span="5"
-        ><div class="grid-content "><all-exer :list="list"></all-exer></div
-      ></el-col>
-      <el-col :span="14" style="background:white">
+    <el-row style="margin-top:30px" > 
+      <el-col :span="20" style="background:white">
         <el-container>
           <el-main>
-            <h1 style="text-align:left">{{ name }}习题</h1>
             <el-divider></el-divider>
-            <div v-show="one.length > 0">
+                 <div v-show="one.length > 0">
               <h3>单选题</h3>
               <ul v-for="(item, index) in one" :key="index">
                 <li>
-                      <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                      <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                  </p>
+                      <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>   </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
@@ -43,8 +37,13 @@
                   >
                     <el-radio :label="select.name">{{ select.name }}</el-radio>
                   </el-radio-group>
-             
-               
+                     <el-divider content-position="left">本题知识点</el-divider>
+                  <ul  v-for="(it,ind) in item.tags" :key="ind">
+                    <li>
+                      <p>{{it}}</p>
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
                 </li>
               </ul>
             </div>
@@ -52,9 +51,7 @@
               <h3>多选题</h3>
               <ul v-for="(item, index) in more" :key="index">
                 <li>
-                   <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                   <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                   </p>
+                   <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button></p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
@@ -82,6 +79,13 @@
                   >
                     <el-checkbox :label="select.name">{{select.name}}</el-checkbox>
                   </el-checkbox-group>
+                                      <el-divider content-position="left">本题知识点</el-divider>
+                  <ul  v-for="(it,ind) in item.tags" :key="ind">
+                    <li>
+                      <p>{{it}}</p>
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
                 </li>
               </ul>
             </div>
@@ -89,9 +93,7 @@
               <h3>不定项选择题</h3>
               <ul v-for="(item, index) in maybe" :key="index">
                 <li>
-                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                    <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                    </p>
+                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button> </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
@@ -119,6 +121,13 @@
                   >
                     <el-checkbox :label="select.name">{{select.name}}</el-checkbox>
                   </el-checkbox-group>
+                                      <el-divider content-position="left">本题知识点</el-divider>
+                  <ul  v-for="(it,ind) in item.tags" :key="ind">
+                    <li>
+                      <p>{{it}}</p>
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
                 </li>
               </ul>
             </div>
@@ -126,10 +135,8 @@
               <h3>填空题</h3>
               <ul v-for="(item, index) in input" :key="index">
                 <li>
-                     <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                     <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                     </p>
-                  <ul v-for="(it,ind) in item.stems" :key="ind">
+                     <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button> </p>
+                  <ul v-for="(it,ind) in item.stems" :key="ind"> 
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
                     </li>
@@ -158,14 +165,19 @@
                   ></el-input>
                     </li>
                   </ul>
+                                      <el-divider content-position="left">本题知识点</el-divider>
+                  <ul  v-for="(it,ind) in item.tags" :key="ind">
+                    <li>
+                      <p>{{it}}</p>
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider>
                 </li>
               </ul>
               <h3>主观题</h3>
               <ul v-for="(item, index) in textarea" :key="index">
                 <li>
-                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button>
-                    <el-tooltip content="加入错题集" placement="bottom" effect="light"><el-button type="warning" icon="el-icon-star-off" circle @click="addWrongExercise(item.id)"></el-button></el-tooltip>
-                    </p>
+                    <p>第{{ index + 1 }}题: {{ item.title }}   <el-button type="danger" @click="item.show_solutions=!item.show_solutions" plain>查看题目提示</el-button> </p>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
                       <p v-show="it.text!=null">{{it.text}}</p>
@@ -173,7 +185,7 @@
                   </ul>
                   <ul v-for="(it,ind) in item.stems" :key="ind">
                     <li>
-                      <img v-show="it.img!=null" :src="it.img"> 
+                      <img v-show="it.img!=null" :src="it.img">
                     </li>
                   </ul>
                        <div  v-show="item.show_solutions">
@@ -193,42 +205,39 @@
                     v-model="item.answers[0].textarea"
                     clearable
                   ></el-input>
+                                      <el-divider content-position="left">本题知识点</el-divider>
+                  <ul  v-for="(it,ind) in item.tags" :key="ind">
+                    <li>
+                      <p>{{it}}</p>
+                    </li>
+                  </ul>
+                   <el-divider content-position="left">是不是感觉更巩固了呢？</el-divider> 
                 </li>
               </ul>
-            </div>
-                <div class="center-children">
-              <el-button type="primary"
-              @click="submit()"
-                >&nbsp;&nbsp;&nbsp;&nbsp; 提交
-                &nbsp;&nbsp;&nbsp;&nbsp;</el-button
-              >
             </div>
           </el-main>
         </el-container>
       </el-col>
-      <el-col :span="5"><div class="grid-content "></div></el-col>
+      <el-col :span="4"><div class="grid-content "></div></el-col>
     </el-row>
   </div>
 </template>
 <script>
-import allExer from "../components/allExer";
 export default {
-   components: {
-    allExer
-  },
   data() {
     return {
-      name:"sda",
-      courses:[],
-     list:[{name:"sd",id:"123",test_id:"123",classes:[{class_name:"123sad",exercise_id:123,exercise_easy_id:123,exercise_middle_id:234,exercise_hard_id:234}]}],
-      id:"",
+      fileList:[],
+         items:[{name:"sad",id:"123",classes:[{className:"sad",classId:"123"}]},{name:"sad",id:"123",classes:[{className:"sazzzzzzd",classId:"123"}]}],
+    click:"请选择课程",
+    course_id:"",
       class_id:"",
-      video_ids:[],
-      question_ids:[],
-      kecheng: "数据库",
-      xiaojie: "1.1：算法",
-      one:[
-        { id:"",title: "题目描述", selects: [{name:"红色"}],selected:"",difficulty:0,stems:[{img:null,text:"题干描述",type:0}],show_solutions:false,solutions:[{img:"ss",text:"dasd",type:1,if_last:1}]},
+    exercise_id:0,
+       items_class:[{className:"sad",classId:"123"},{className:"saddd",classId:"123"}],
+    click_class:"请选择课程",
+    click_exercise:"请选择习题",
+      name:"sda",
+         one:[ 
+        { id:"",title: "题目描述", selects: [{name:"红色"}],selected:"",difficulty:0,stems:[{img:null,text:"题干描述",type:0}],show_solutions:false,solutions:[{img:"ss",text:"dasd",type:1,if_last:1}],tags:["asdas","dasda"]},
       ],
       more: [
         { id:"",title: "你喜欢", selects: [{name:"红色"}] ,selected: ["红色"], difficulty:0},
@@ -245,72 +254,87 @@ export default {
     };
   }
   ,
-  
-  mounted(){
-    var that=this
-    ////复制 获取exerciselist
-   ///获取课程id
-        this.$axios.post('/course/user_list',
-     this.qs.stringify({
-        id:0
-      }),
-      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-      .then(res=>{
-          if(res.status==200){
-            console.log(res);
-            this.list=res.data.courses
-            }
-        })
-    //////粘贴 获取exerciselist
-       this.$axios.post('exercise/question/info',{
-     params: {
-        id:this.$route.params.exerciseId
-        } ,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-      .then(res=>{
-            if(res.status==200){
-              for(var i=0;i<res.data.questions.length;i++){
-              var dan={id:res.data.questions[i].id,title: res.data.questions[i].text,difficulty:res.data.questions[i].difficulty,tags:res.data.questions[i].tags,solutions:res.data.questions[i].solutions,stems:res.data.questions[i].stems,show_solutions:false,right:[],wrong:[],selects:res.data.questions[i].choices,answers:res.data.questions[i].answers}
-              if(res.data.question_type==1){
-                that.one.push(dan)
-              }
-              if(res.data.question_type==2){ 
-                that.input.push(dan)
-              }
-              else if(res.data.question_type==3){     
-                that.more.push(dan)
-              }
-            else if(res.data.question_type==4){              
-                that.maybe.push(dan)
-              }
-              else if(res.data.question_type==5){
-                that.textarea.push(dan)
-              }
-              }
-          }})
-        
-    //////粘贴
- },
   methods: {
-    addWrongExercise(id){
-       this.$axios({
-            url:'exercise/add_exercise',
-             method:'POST',
-             params: {
-        question_id:id,
-        user_id:0
-        }
-          }).then(res=>{
-            if(res.status==200){
-                this.$message({
-          message: '加入错题集成功',
-          type: 'success'
-        });
-          }})
+    addQuestion(question_type){
+      if(question_type==1){
+        this.one.push(  {input:"",question_type:1, id:"",title: "", selects: [],selected:"",difficulty:0,stems:[],tags:[],tag:""},)
+      }
+      else if(question_type==2){
+           this.input.push(  {input:"",question_type:2, id:"",title: "",answers:[],difficulty:0,stems:[],tags:[],tag:""},)
+ /////待定
+      }
+      else if(question_type==3){
+           this.more.push(  {input:"",question_type:3, id:"",title: "", selects: [],selected:[],difficulty:0,stems:[],tags:[],tag:""},)
+
+      }
+      else if(question_type==4){
+           this.maybe.push(  {input:"",question_type:4, id:"",title: "", selects: [],selected:[],difficulty:0,stems:[],tags:[],tag:""},)
+      }
+      else if(question_type==5){
+           this.textarea.push(  {input:"",question_type:5, id:"",title: "", answers:[{answer:""}],difficulty:0,stems:[],tags:[],tag:""},)
+    ////待定 
+    }
+    },
+    submit(){
+
+    },
+      dele(question_type,index){
+      if(question_type==1){
+        this.one.splice(index,1)
+      }
+      else if(question_type==2){
+        this.input.splice(index,1)
+      }
+      else if(question_type==3){
+        this.more.splice(index,1)
+      }
+      else if(question_type==4){
+        this.maybe.splice(index,1)
+      }
+      else if(question_type==5){
+        this.textarea.splice(index,1)
+      }
+    },
+    handleCommand(command) {
+      if(this.show_class==true){
+        this.show_question=false
+        this.show_exercise=false
+        this.click_class="请选择课时"
+        this.click_exercise="请选择习题"
+      } 
+      else{
+      this.show_class=true
+      }
+       this.click = command.name;
+      this.course_id=command.id
+      this.items_class=command.classes
+    },
+    handleCommand_class(command) {
+       if(this.show_exercise==true){
+        this.show_question=false
+        this.click_exercise="请选择习题"
+      } 
+      else{
+      this.show_exercise=true
+      }
+      this.click_class = command.className;
+      this.class_id=command.classId 
+    },
+     handleCommand_exercise(command) {
+       if(command==0)
+      this.click_exercise = "课前习题";
+      else (command==1)
+      this.click_exercise = "课后习题";
+      this.show_question=true 
+      this.exercise_id=command.
+      alert(this.exercise_id)    
     },
     easy() {},
     middle() {},
-    hard() {}
+    hard() {},
+    del_exercise(){
+
+    }
   }
 };
 </script>
@@ -338,3 +362,4 @@ li {
   text-align: center;
 }
 </style>
+

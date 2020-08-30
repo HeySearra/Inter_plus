@@ -12,8 +12,8 @@
     <ul v-for="(item,index) in one" :key="index">
         <li> 
             <p>第{{ index+1 }}题: {{item.title}}</p>
-            <el-radio-group v-model="item.selected" v-for="(select,ind) in item.selects" :key="ind">
-                 <el-radio :label="ind">{{select}}</el-radio>
+            <el-radio-group v-model="item.selected" v-for="(select,ind) in item.choices" :key="ind">
+                 <el-radio :label="ind">{{select.name}}</el-radio>
             </el-radio-group>
         </li>
     </ul>
@@ -23,8 +23,8 @@
     <ul v-for="(item,index) in more" :key="index">
         <li> 
             <p>第{{ index+1 }}题: {{item.title}}</p>
-            <el-checkbox-group v-model="item.selected" v-for="(select,ind) in item.selects" :key="ind">
-                 <el-checkbox :label="select"></el-checkbox>
+            <el-checkbox-group v-model="item.selected" v-for="(select,ind) in item.choices" :key="ind">
+                 <el-checkbox :label="select.name"></el-checkbox>
             </el-checkbox-group>
         </li>
     </ul>
