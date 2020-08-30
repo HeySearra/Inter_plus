@@ -73,6 +73,11 @@ export default {
     this.init()
   },
   methods: {
+    getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
+    },
     toAllClass(){
       if(this.search !== '')
         this.$router.push({name: 'allClass', query: {keywords: this.search}})
@@ -108,11 +113,12 @@ export default {
       this.getUserIdentity()
     },
     getUserInfo(){
+      var that = this;
       this.$axios.get("/user/user_info",{
         params: {
           id: 0
-        }
-      }).then(res => {
+        },
+      },{headers: {'X-CSRFToken': that.getCookie('csrftoken')}}).then(res => {
         if(res.status === 200){
           this.user_img = res.data.img
           this.isLog = true

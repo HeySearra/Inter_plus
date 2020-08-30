@@ -29,6 +29,7 @@ Vue.component("manage", manage);
 Vue.component("lb", lb);
 
 Vue.config.productionTip = false;
+axios.defaults.withCredentials = true;
 
 Vue.use(mavonEditor);
 Vue.use(VueVideoPlayer);

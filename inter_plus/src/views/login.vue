@@ -61,10 +61,10 @@ export default {
     };
   },
   methods: {
-    getCookie(name, token) {
-      var value = '; ' + token
-      var parts = value.split('; ' + name + '=')
-      if (parts.length === 2) return parts.pop().split(';').shift()
+    getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
     },
 
     submit(form) {
@@ -78,10 +78,11 @@ export default {
             message: "验证成功，正在登录",
             type: "success"
           });
+          var that = this;
           this.$axios.post("/user/login",{
               email: this.form.account,
               password: this.form.password,},{
-              headers: {'X-CSRFToken': this.getCookie('csrftoken')}
+              headers: {'X-CSRFToken': that.getCookie('csrftoken')}
           }).then(res => {
             if (res.status === 200&&res.data.status===0) {
               this.$message({
@@ -123,7 +124,8 @@ export default {
       this.$axios.get("/user/user_info",{
         params: {
           id: 0
-        }
+        },
+        headers: {'X-CSRFToken': that.getCookie('csrftoken')}
       }).then(res => {
         if(res.status === 200){
           this.user_img = res.data.img

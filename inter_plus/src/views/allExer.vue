@@ -22,17 +22,23 @@ export default{
   },
   mounted(){
     this.$axios.post('/course/user_list',
-     this.qs.stringify({
+     {
         id:0
-      }),
-      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+      },
+      {headers: {'X-CSRFToken': this.getCookie('csrftoken')}})
       .then(res=>{
           if(res.status==200){
             console.log(res);
             this.list=res.data.courses
             }
         })
-  
+  },
+  methods:{
+    getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
+    },
   }
 }
 ;

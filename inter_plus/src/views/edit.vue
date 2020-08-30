@@ -144,13 +144,14 @@ export default {
   },
   
   mounted(){
-    var that=this
+    var that=this;
     this.$axios({
       url:"user/user_info",
       method:"get",
       params:{
         id:'123'
-        }
+        },
+      headers: {'X-CSRFToken': that.getCookie('csrftoken')}
         }).then(res=>{
           if(res.status==200){
             console.log(res);
@@ -164,6 +165,11 @@ export default {
             })
             },
   methods: {
+    getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
+    },
       //图片上传之前检验
     beforeImageUpload(file) {
       console.log(file)
@@ -242,7 +248,8 @@ handleRemove(file, fileList) {
                major:that.ruleForm.region,
                grade:that.ruleForm.grade,
                birthday:that.ruleForm.date
-               }
+               },
+               headers: {'X-CSRFToken': that.getCookie('csrftoken')}
           }).then(res=>{
             if(res.status==200){
               if(res.data.status==0)

@@ -107,6 +107,11 @@ export default {
       this.keywords = this.$route.query.keywords;
       this.getSearchResult(this.keywords);
     },
+    getCookie (name) {
+      var value = '; ' + document.cookie
+      var parts = value.split('; ' + name + '=')
+      if (parts.length === 2) return parts.pop().split(';').shift()
+    },
     getSearchResult(keywords, item) {
       this.$axios.post("/course/list",{subject_id: item, key_words: keywords
       })
@@ -137,7 +142,12 @@ export default {
         });
     },
     getSubjects() {
-      this.$axios.post("/subject/list",).then(res => {
+      var that = this;
+      this.$axios({
+        url: "/subject/list",
+        mmethod: post,
+        headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+        }).then(res => {
         if (res.status === 200) {
           this.classCategory = res.data.subject;
         }

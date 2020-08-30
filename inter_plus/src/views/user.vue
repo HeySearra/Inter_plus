@@ -101,13 +101,14 @@ export default {
     };
   },
   mounted(){
-    var that=this
+    var that=this;
     this.$axios({
       url:"course/user_list",
       method:"post",
       data:{
         id:0
-        }
+        },
+      headers: {'X-CSRFToken': that.getCookie('csrftoken')}
         }).then(res=>{
           if(res.status==200){
             console.log(res);
@@ -126,7 +127,8 @@ export default {
       method:"get",
       params:{
         id:0
-        }
+        },
+      headers: {'X-CSRFToken': that.getCookie('csrftoken')}
         }).then(res=>{
           if(res.status==200){
             console.log(res);
@@ -142,6 +144,11 @@ export default {
     }
     ,
     methods: {
+    getCookie (name) {
+        var value = '; ' + document.cookie
+        var parts = value.split('; ' + name + '=')
+        if (parts.length === 2) return parts.pop().split(';').shift()
+    },
     toClass(item) {
       this.$router.push({
         name: "classView",
