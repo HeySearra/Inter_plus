@@ -97,10 +97,9 @@ export default {
     },
     getSubjects() {
       var that = this;
-      this.$axios({
-        url: "/subject/list",
-        mmethod: post,
-        headers: {'X-CSRFToken': that.getCookie('csrftoken')},
+      this.$axios.post(
+        "/subject/list",
+          {},{headers: {'X-CSRFToken': that.getCookie('csrftoken')},
       }).then(res => {
         if (res.status === 200) {
           this.subject_list = res.data.subject;

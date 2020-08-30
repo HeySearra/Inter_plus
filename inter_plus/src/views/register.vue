@@ -79,7 +79,7 @@ export default {
       }
     };
     let validatePass = (rule, value, callback) => {
-      let reg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d){6,18}$/;
+      let reg=/^(?![^a-zA-Z]+$)(?!\D+$).{6,18}/;
       if (value === "") {
         callback(new Error("请输入密码"));
       } else if (!reg.test(value)) {

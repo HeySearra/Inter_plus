@@ -17,7 +17,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 const Axios = axios.create({
   //请求接口
-  baseURL:"http://127.0.0.1:8000'",
+  baseURL:"http://127.0.0.1:8000",
   //超时设置
   timeout:5000,
   //请求头设置
