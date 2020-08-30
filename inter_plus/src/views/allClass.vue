@@ -145,7 +145,7 @@ export default {
       var that = this;
       this.$axios({
         url: "/subject/list",
-        mmethod: post,
+        method: 'POST',
         headers: {'X-CSRFToken': that.getCookie('csrftoken')},
         }).then(res => {
         if (res.status === 200) {

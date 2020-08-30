@@ -94,6 +94,7 @@ export default {
           if(res.data.status === 0){
             this.isLog = false
             localStorage.removeItem('userId')
+            localStorage.removeItem('token')
           } else{
             this.$message({message: '登出失败，稍后再试', type:'error'})
           }

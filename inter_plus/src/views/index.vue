@@ -96,11 +96,9 @@ export default {
       if (parts.length === 2) return parts.pop().split(';').shift()
     },
     getSubjects() {
-      var that = this;
-      this.$axios.post(
-        "/subject/list",
-          {},{headers: {'X-CSRFToken': that.getCookie('csrftoken')},
-      }).then(res => {
+      this.$axios.post("/subject/list", {},
+          {headers: {'X-CSRFToken': this.getCookie('csrftoken')}},
+      ).then(res => {
         if (res.status === 200) {
           this.subject_list = res.data.subject;
         }

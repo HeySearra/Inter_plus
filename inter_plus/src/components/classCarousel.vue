@@ -15,7 +15,8 @@ export default {
   name: "classCarousel",
   props: {
     list: {
-      default: [
+      default: function(){
+        return [
         {
           courseId: 1,
           class_img:
@@ -34,6 +35,7 @@ export default {
           class_img: ""
         }
       ]
+      }
     }
   },
   data() {
