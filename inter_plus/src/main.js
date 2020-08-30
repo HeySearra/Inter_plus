@@ -32,7 +32,7 @@ Axios.interceptors.request.use(config => {
     // }
   config.headers.contentType = 'application/x-www-form-urlencoded; charset=UTF-8'
     if (localStorage.token) {
-        config.headers.Authorization = 'JWT ' + localStorage.token
+        config.headers.Authorization = localStorage.token
     }
     return config
 },error =>{

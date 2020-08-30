@@ -89,6 +89,7 @@ export default {
                 message: "登录成功",
                 type: "success"
               });
+              localStorage.setItem('token', res.data.token)
               this.getUserInfo()
               if(this.$route.params.to){
                 this.$router.push(this.$route.params.to)
@@ -125,7 +126,7 @@ export default {
         params: {
           id: 0
         },
-        headers: {'X-CSRFToken': that.getCookie('csrftoken')}
+        headers: {'X-CSRFToken': this.getCookie('csrftoken')}
       }).then(res => {
         if(res.status === 200){
           this.user_img = res.data.img
