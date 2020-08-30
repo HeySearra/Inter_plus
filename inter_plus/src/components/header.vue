@@ -86,12 +86,14 @@ export default {
       //this.$message('click on item ' + command)
       if(command === 'LogOut'){
         this.$axios.get('/user/login').then(res => {
-          if(res.status === 0){
+          if(res.data.status === 0){
             this.isLog = false
             localStorage.removeItem('userId')
           } else{
             this.$message({message: '登出失败，稍后再试', type:'error'})
           }
+        }).catch(e=>{
+          console.log(e)
         })
       }else{
         console.log(command)

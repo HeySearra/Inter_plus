@@ -83,7 +83,7 @@ export default {
               password: this.form.password,},{
               headers: {'X-CSRFToken': this.getCookie('csrftoken')}
           }).then(res => {
-            if (res.status === 0) {
+            if (res.status === 200&&res.data.status===0) {
               this.$message({
                 message: "登录成功",
                 type: "success"
@@ -107,6 +107,8 @@ export default {
             type: "error"
           });
         }
+      }).catch(e=>{
+        console.log(e)
       });
     },
     to_register() {

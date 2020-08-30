@@ -63,7 +63,7 @@ const router = new Router({
     {
       path: "/manage",
       name: "manage",
-      component: () => import("../components/manage.vue"),
+      component: () => import("../components/Manage.vue"),
       children: [
         {
           path: "uploadVideo",

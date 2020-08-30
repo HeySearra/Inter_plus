@@ -11,7 +11,7 @@ import NavBar from "./components/header.vue";
 import cib from "./components/course_intro_block.vue";
 import classCarousel from "./components/classCarousel";
 import classCardSp from "./components/classCardSp";
-import manage from "./components/manage.vue";
+import manage from "./components/Manage.vue";
 import lb from "./components/list_block";
 import 'element-ui/lib/theme-chalk/index.css';
 

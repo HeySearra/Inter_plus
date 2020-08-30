@@ -134,9 +134,13 @@ export default {
               password: this.registerForm.pass},
               // {headers: {'X-CSRFToken': this.getCookie('csrftoken'),}
           ).then(res => {
-            if (res.status === 0) {
-              this.$message({ message: "注册成功！请登录", type: "success" });
-              this.$router.push({ name: "login" });
+            if (res.status === 200) {
+              if(res.data.status === 0){
+                this.$message({ message: "注册成功！请登录", type: "success" });
+                this.$router.push({ name: "login" });
+              } else {
+                this.$message({ message: "注册失败", type: "error" });
+              }
             } else {
               this.$message({ message: "注册失败", type: "error" });
             }
@@ -145,6 +149,8 @@ export default {
           this.$message({ message: "验证失败，请重新填写", type: "error" });
           return false;
         }
+      }).catch(e=>{
+        console.log(e)
       });
     },
     resetForm(formName) {
