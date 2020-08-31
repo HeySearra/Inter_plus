@@ -38,12 +38,14 @@
             @keyup.enter.native="$refs.repas.focus()"
             placeholder="请输入密码"
             prefix-icon="el-icon-edit"
+            maxLength="18"
           >
           </el-input>
         </el-form-item>
         <el-form-item prop="checkPass" class="formlabel">
           <el-input
             type="password"
+            maxLength="18"
             v-model="registerForm.checkPass"
             placeholder="再次输入密码以确认"
             prefix-icon="el-icon-check"

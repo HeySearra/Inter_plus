@@ -16,6 +16,7 @@
         show-checkbox
         node-key="id"
         :filter-node-method="filterNode"
+        :check-strictly="true"
         ref="tree">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label }}</span>

@@ -56,7 +56,7 @@
         </el-menu-item-group>
       </el-menu>
     </el-col>
-    <el-col :span="20">
+    <el-col :span="20" style="min-height: 87vh;">
       <router-view></router-view>
     </el-col>
   </div>

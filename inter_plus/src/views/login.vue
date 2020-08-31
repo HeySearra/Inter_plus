@@ -6,8 +6,8 @@
         <el-form-item prop="account">
           <el-input
             prefix-icon="el-icon-message"
-            autofocus="true"
             v-model="form.account"
+            autofocus="true"
             placeholder="请输入邮箱"
             @keyup.enter.native="$refs.pas.focus()"
             maxLength="50"
@@ -18,10 +18,10 @@
           <el-input
             placeholder="请输入密码"
             v-model="form.password"
-            show-password
+            type="password"
             ref="pas"
             @keyup.enter.native="submit('form')"
-            maxLength="20"
+            maxLength="18"
             prefix-icon="el-icon-edit"
           >
           </el-input>
@@ -42,6 +42,16 @@
 export default {
   name: "login",
   data() {
+    let validateEmail = (rule, value, callback) => {
+      let reg = /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      if (value.length === 0) {
+        callback(new Error("请输入邮箱"));
+      } else if (!reg.test(value)) {
+        callback(new Error("请输入形如xx@xx.xx格式的邮箱"));
+      } else {
+        callback();
+      }
+    };
     return {
       form: {
         account: "",
@@ -49,12 +59,7 @@ export default {
       },
       rules: {
         account: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
-          {
-            type: "email",
-            message: "请输入形如xx@xx.xx格式的邮箱",
-            trigger: ["blur", "change"]
-          }
+          { validator: validateEmail, trigger: "blur" }
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
@@ -66,12 +71,7 @@ export default {
         var parts = value.split('; ' + name + '=')
         if (parts.length === 2) return parts.pop().split(';').shift()
     },
-
     submit(form) {
-      if(this.$route.params.to){
-        this.$router.push(this.$route.params.to)
-      }
-      else this.$router.push({ name: "index" });
       this.$refs[form].validate(valid => {
         if (valid) {
           this.$message({
@@ -112,6 +112,10 @@ export default {
       }).catch(e=>{
         console.log(e)
       });
+      if(this.$route.params.to){
+        this.$router.push(this.$route.params.to)
+      }
+      else this.$router.push({ name: "index" });
     },
     to_register() {
       if(this.$route.params.to)

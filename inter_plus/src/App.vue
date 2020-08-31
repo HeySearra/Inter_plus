@@ -3,7 +3,7 @@
     <el-header>
       <NavBar></NavBar>
     </el-header>
-    <router-view />
+    <router-view style="min-height:87vh;"/><!--如果不设置min-height，管理页面的页脚会在导航栏下面-->
     <el-footer>
       <el-divider>
         <span style="font-size: 17px;">皓磊教育，致力于成就每一个人</span>
