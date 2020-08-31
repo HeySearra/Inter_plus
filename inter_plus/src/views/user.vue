@@ -50,7 +50,7 @@
                 @click="toClass(item)"
                 style="padding: 0; line-height: 0;"
                 ><el-image
-                  :src="item.jpg"
+                  :src="item.class_img"
                   :fit="'scale-down'"
                   @click="toClass(item)"
                 ></el-image
@@ -112,16 +112,9 @@ export default {
         }).then(res=>{
           if(res.status==200){
             console.log(res);
-            for(var i=0;i<res.data.courses.length;i++){
-               var course={
-              jpg:res.data.courses[i].class_img,
-              name:res.courses[i].data.name,
-          courseId:res.courses[i].data.id,
+            this.myClass=res.data.courses
             }
-            that.myClass.push(course)
-            }
-            }
-            })
+      })
      this.$axios({
       url:"user/user_info",
       method:"get",
@@ -152,7 +145,7 @@ export default {
     toClass(item) {
       this.$router.push({
         name: "classView",
-        params: { courseId: item.courseId }
+        params: { courseId: item.id }
       });
     },
     handleSelect(key, keyPath) {

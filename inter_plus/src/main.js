@@ -9,7 +9,7 @@ import axios from "axios";
 
 import NavBar from "./components/header.vue";
 import cib from "./components/course_intro_block.vue";
-import manage from "./components/manage.vue";
+import manage from "./components/Manage.vue";
 import classCarousel from "./components/classCarousel";
 import classCardSp from "./components/classCardSp";
 import lb from "./components/list_block";
