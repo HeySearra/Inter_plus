@@ -72,6 +72,11 @@ export default {
   mounted(){
     this.init()
   },
+  watch:{
+    isLog(newValue){
+      console.log(newValue)
+    }
+  },
   methods: {
     getCookie (name) {
         var value = '; ' + document.cookie
@@ -92,9 +97,10 @@ export default {
       if(command === 'LogOut'){
         this.$axios.get('/user/login').then(res => {
           if(res.data.status === 0){
-            this.isLog = false
             localStorage.removeItem('userId')
             localStorage.removeItem('token')
+            this.isLog = localStorage.token?true:false
+            this.$message({message:'登出成功！', type:'success'})
           } else{
             this.$message({message: '登出失败，稍后再试', type:'error'})
           }
@@ -110,19 +116,21 @@ export default {
       this.$router.push({ name: "index" });
     },
     init(){
+      this.isLog = localStorage.token?true:false
+      this.isTeacher = this.isAdmin = false
       this.getUserInfo()
       this.getUserIdentity()
     },
     getUserInfo(){
-      var that = this;
-      this.$axios.get("/user/user_info",{
+      const that = this;
+      this.$axios.get("/user/user_info", {
         params: {
           id: 0
         },
-      },{headers: {'X-CSRFToken': that.getCookie('csrftoken')}}).then(res => {
+      }, {headers: {'X-CSRFToken': that.getCookie('csrftoken')}}).then(res => {
         if(res.status === 200){
           this.user_img = res.data.img
-          this.isLog = true
+          this.isLog = localStorage.token?true:false
           localStorage.setItem('userId', res.data.id)
         }
         else{
@@ -139,6 +147,7 @@ export default {
       })
     },
     getUserIdentity(){
+      if(!this.isLog) return;
       this.$axios.get('/user/identity', {params:{id: 0}}).then(res=>{
         if(res.status == 200){
           this.isTeacher = true

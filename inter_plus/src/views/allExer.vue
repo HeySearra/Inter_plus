@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import allExer from "@/components/allExer";
+import allExer from "../components/allExer";
 export default{
   components:{
     allExer

@@ -119,6 +119,7 @@ export default {
           console.log(res);
           if (res.status === 200) {
             //this.course_list = res.data
+            this.course_list = []
             let j = 0;
             for (let i in res.data.courses) {
               this.course_list[j].courseId = i.id;

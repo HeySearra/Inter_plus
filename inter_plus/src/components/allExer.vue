@@ -36,9 +36,12 @@ let text = "初始化赋值123";
 export default {
   props: {
     list: {
-      default:
+      default:function(){
+        return
         [{name:"sd",id:"123",test_id:"123",classes:[{class_name:"123sad",exercise_id:123,exercise_easy_id:123,exercise_middle_id:234,exercise_hard_id:234}]}]
-      }},
+      }
+    }
+  },
   data() {
     return {
       user_id:"",

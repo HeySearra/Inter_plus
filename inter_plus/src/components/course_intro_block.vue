@@ -11,7 +11,7 @@
       <div style="font-size: x-large; margin-bottom: 10px;">
         {{ classCard.className }}
       </div>
-      <div v-if="!my_join" style=" margin-bottom: 10px;" :class="{'active': switchJoin}">
+      <div v-if="!my_join" style=" margin-bottom: 10px;"><!-- :class="{'active': switchJoin}"-->
         <el-button
           plain
           style="padding: 10px; font-size: medium;"

@@ -5,7 +5,9 @@
     </el-header>
     <router-view />
     <el-footer>
-      Footer
+      <el-divider>
+        <span style="font-size: 17px;">皓磊教育，致力于成就每一个人</span>
+      </el-divider>
     </el-footer>
   </div>
 </template>
@@ -26,6 +28,9 @@ body,
   margin: 0;
   padding: 0;
   min-width: 1000px;
+  height: 50px;
+  width: 100%;
+  text-align: center;
 }
 
 .el-header {
@@ -38,16 +43,13 @@ body,
   z-index: 2000;
 }
 
-.el-footer {
-  height: 50px;
-  width: 100%;
-  text-align: center;
-}
-
 body {
   background-color: #f6f6f6;
   width: 100vw !important;
   overflow-x: hidden;
+}
+.el-divider__text.is-center {
+  background-color: whitesmoke;
 }
 /* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

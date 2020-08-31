@@ -167,13 +167,15 @@ export default {
           this.like = i.is_like == 1 ? true:false
           this.test_id = res.data.test_id
           let j = 0
-          i.classes.forEach(item=>{
-            this.tableData[j].classId = item.class_index
-            this.tableData[j].name = item.class_name
-            this.tableData[j].v_address = item.video_id
-            this.tableData[j].note_address = item.note_id
-            this.tableData[j].exercise_id = item.exercise_id
-          })
+          if(i.classes.length>0){
+            i.classes.forEach(item=>{
+              this.tableData[j].classId = item.class_index
+              this.tableData[j].name = item.class_name
+              this.tableData[j].v_address = item.video_id
+              this.tableData[j].note_address = item.note_id
+              this.tableData[j].exercise_id = item.exercise_id
+            })
+          }
         }
       }).catch(e =>{this.$message({message: e, type: 'error'})});
     },
@@ -182,7 +184,7 @@ export default {
       let op = this.join?0:1
       this.$axios.post('/course/follow', {
         course_id:this.classCard.courseId, op: op}).then(res=>{
-          if(res.status == 0){
+          if(res.data.status == 0){
             this.join = !this.join
             this.classCard.stuNum = res.data.new_join_num//在这里强制进入课前练习还是在进入课时时进入课前练习
             if(this.join === true){
@@ -198,7 +200,7 @@ export default {
       let op = this.like?0:1
       this.$axios.post('/course/like', {
         course_id:this.classCard.courseId, op: op}).then(res=>{
-          if(res.status == 0){
+          if(res.data.status == 0){
             this.like = !this.like
             this.classCard.like_num = res.data.new_like_num
           } else {
