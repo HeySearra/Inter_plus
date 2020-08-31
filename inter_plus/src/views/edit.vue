@@ -23,25 +23,22 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="头像" prop="jpg">
-                  <el-upload
-              action="#"
-              list-type="picture-card"
-              :limit="1"
-              :file-list="ruleForm.jpg"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-              :before-upload="beforeImageUpload"
-              :http-request="uploadImage"
-                :on-exceed="handleExceed"
-              :auto-upload="true"
-            >
-              <i class="el-icon-plus"></i>
-           </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
-             <img width="100%" :src="dialogImageUrl" alt />
-           </el-dialog>
-           </el-form-item>
+          <el-form-item :label-width="formLabelWidth"
+										ref="uploadElement"  label="头像" prop="jpg">
+				<el-upload ref="upload"
+									 action="#"
+									 accept="image/png,image/gif,image/jpg,image/jpeg"
+									 list-type="picture-card"
+									 :limit=limitnum
+									 :auto-upload="false"
+									 :on-exceed="handleExceed"
+									 :before-upload="handleBeforeUpload"
+									 :on-preview="handlePictureCardPreview"
+									 :on-remove="handleRemove"
+									 :on-change="imgChange">
+					<i class="el-icon-plus"></i>
+				</el-upload>
+			</el-form-item>
             <el-form-item label="姓名" prop="name">
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
@@ -53,7 +50,8 @@
               </el-radio-group>
             </el-form-item>
                    <el-form-item label="生日" prop="date">
-      <el-date-picker  type="date" placeholder="选择日期"   value-format="yyyy-MM-dd"  v-model="ruleForm.date" style="width: 100%;"></el-date-picker>
+      <el-date-picker  type="date" placeholder="选择日期"  format="yyyy-MM-dd"
+  value-format="yyyy-MM-dd"   v-model="ruleForm.date" @change="updateDate" style="width: 100%;"></el-date-picker>
   </el-form-item>
             <el-form-item label="学校" prop="school">
               <el-input v-model="ruleForm.school"></el-input>
@@ -102,9 +100,10 @@
 export default {
   data() {
     return {
+      limitnum:1,
       dialogImageUrl: "",
       dialogVisible: false,
-     
+     formLabelWidth: '80px',
       upload_url: 'upload/pic',
       grade:[{name:"一年级",value:1},{name:"二年级",value:2},{name:"三年级",value:3},{name:"四年级",value:4},{name:"五年级",value:5},{name:"六年级",value:6},],
       ruleForm: { 
@@ -149,7 +148,7 @@ export default {
       url:"user/user_info",
       method:"get",
       params:{
-        id:'123'
+        id:0
         },
       headers: {'X-CSRFToken': that.getCookie('csrftoken')}
         }).then(res=>{
@@ -165,6 +164,16 @@ export default {
             })
             },
   methods: {
+     updateDate: function(val) {
+        console.log("val:"+val)
+        this.ruleForm.date=val
+      },
+    	imgChange (files, fileList) {
+				this.hideUpload = fileList.length >= this.limitNum;
+				if (fileList) {
+					this.$refs.uploadElement.clearValidate();
+				}
+			},
     getCookie (name) {
         var value = '; ' + document.cookie
         var parts = value.split('; ' + name + '=')
@@ -202,23 +211,23 @@ handleRemove(file, fileList) {
       }
     },
 //上传图片
-    uploadImage(image){
-      var that=this
-      this.$axios({
-      url:"/upload/pic",
-      method:"get",
-      params:{
-        img:image.file
-        }
-        }).then(res=>{
-          if(res.status==200){
-            if(res.data.status==0)
-             that.ruleForm.jpg.push({name:"头像",url:res.data.url})
-            }
-            else
-            that.$message("上传失败")
-            })
-    },
+   // 上传文件之前的钩子
+			handleBeforeUpload (file) {
+				if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+					this.$notify.warning({
+						title: '警告',
+						message: '请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片'
+					})
+				}
+				let size = file.size / 1024 / 1024 / 2
+				if (size > 2) {
+					this.$notify.warning({
+						title: '警告',
+						message: '图片大小必须小于2M'
+					})
+				}
+				this.ruleForm.jpg=file
+			},
     handleExceed: function () {
         this.$alert('请先删除选择的图片或视频，再上传  。最多上传一张', '提示', {
             type: 'warning'
@@ -237,11 +246,13 @@ handleRemove(file, fileList) {
       this.$refs[formName].validate(valid => {         
         if (valid) {
           var that=this
+        let fd = new FormData();//通过form数据格式来传
+				fd.append("img", this.ruleForm.jpg); //传文件
           this.$axios({
             url:'user/user_info',
             method:'POST',
              data: {
-               img:that.ruleForm.jpg[0].url,
+               fd,
                name:that.ruleForm.name, 
                sex:parseInt(that.ruleForm.sex),
                school:that.ruleForm.school,
@@ -251,6 +262,7 @@ handleRemove(file, fileList) {
                },
                headers: {'X-CSRFToken': that.getCookie('csrftoken')}
           }).then(res=>{
+            console.log(res)
             if(res.status==200){
               if(res.data.status==0)
                 alert('修改成功')

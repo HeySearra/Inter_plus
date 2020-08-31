@@ -41,63 +41,53 @@
   <el-form-item label="申请理由" prop="desc">
     <el-input type="textarea" v-model="ruleForm.desc"></el-input>
   </el-form-item>
-  <el-form-item label="身份证照片" prop="fileList1">
-       <el-upload
-              action="#"
-              list-type="picture-card"
-              :limit="1"
-              :file-list="ruleForm.fileList1"
-              :on-preview="handlePictureCardPreview1"
-              :on-remove="handleRemove1"
-              :before-upload="beforeImageUpload"
-              :http-request="uploadImage1"
-                :on-exceed="handleExceed"
-              :auto-upload="true"
-            >
-              <i class="el-icon-plus"></i>
-           </el-upload>
-                <el-dialog :visible.sync="dialogVisible1">
-             <img width="100%" :src="dialogImageUrl1" alt />
-           </el-dialog>
-  </el-form-item>
-  <el-form-item label="学信网照片" prop="fileList2">
-    <el-upload
-              action="#"
-              list-type="picture-card"
-              :limit="1"
-              :file-list="ruleForm.fileList2"
-              :on-preview="handlePictureCardPreview2"
-              :on-remove="handleRemove2"
-              :before-upload="beforeImageUpload"
-              :http-request="uploadImage2"
-                :on-exceed="handleExceed"
-              :auto-upload="true"
-            >
-              <i class="el-icon-plus"></i>
-           </el-upload>
-                <el-dialog :visible.sync="dialogVisible2">
-             <img width="100%" :src="dialogImageUrl2" alt />
-           </el-dialog>
-  </el-form-item>
-  <el-form-item label="教师资格证照片" prop="fileList3">
-    <el-upload
-              action="#"
-              list-type="picture-card"
-              :limit="1"
-              :file-list="ruleForm.fileList3"
-              :on-preview="handlePictureCardPreview3"
-              :on-remove="handleRemove3"
-              :before-upload="beforeImageUpload"
-              :http-request="uploadImage3"
-                :on-exceed="handleExceed"
-              :auto-upload="true"
-            >
-              <i class="el-icon-plus"></i>
-           </el-upload>
-                <el-dialog :visible.sync="dialogVisible3">
-             <img width="100%" :src="dialogImageUrl3" alt />
-           </el-dialog>
-  </el-form-item>
+    <el-form-item :label-width="formLabelWidth" label="身份证照片"
+										ref="uploadElement1">
+				<el-upload ref="upload"
+									 action="#"
+									 accept="image/png,image/gif,image/jpg,image/jpeg"
+									 list-type="picture-card"
+									 :limit=limitNum
+									 :auto-upload="false"
+					         :before-upload="handleBeforeUpload1"
+			
+							
+									 :on-change="imgChange1">
+					<i class="el-icon-plus"></i>
+				</el-upload>
+			</el-form-item>
+       <el-form-item :label-width="formLabelWidth" label="学信网照片"
+										ref="uploadElement2">
+				<el-upload ref="upload"
+									 action="#"
+									 accept="image/png,image/gif,image/jpg,image/jpeg"
+									 list-type="picture-card"
+									 :limit=limitNum
+									 :auto-upload="false"
+			
+									 :before-upload="handleBeforeUpload2"
+						
+								
+									 :on-change="imgChange2">
+					<i class="el-icon-plus"></i>
+				</el-upload>
+			</el-form-item>
+  <el-form-item :label-width="formLabelWidth" label="教师资格证照片"
+										ref="uploadElement3">
+				<el-upload ref="upload"
+									 action="#"
+									 accept="image/png,image/gif,image/jpg,image/jpeg"
+									 list-type="picture-card"
+									 :limit=limitNum
+									 :auto-upload="false"
+							
+									 :before-upload="handleBeforeUpload3"
+					
+							
+									 :on-change="imgChange3">
+					<i class="el-icon-plus"></i>
+				</el-upload>
+			</el-form-item>
   <el-form-item>
     <el-button type="primary" @click="submitForm('ruleForm')">提交申请</el-button>
   </el-form-item>
@@ -113,6 +103,8 @@
   export default {
     data() {
       return {
+        formLabelWidth: '80px',
+				limitNum: 1,
       dialogImageUrl1: "",
       dialogVisible1: false,
       dialogImageUrl2: "",
@@ -144,7 +136,7 @@
           ],
           graduate_school: [
             { required: true, message: '请填写最高学历毕业院校', trigger: 'blur' },
-            { min: 20, max: 200, message: '长度在 0 到 100 个字符', trigger: 'blur' }
+            { min: 20, max: 200, message: '长度在 20 到 100 个字符', trigger: 'blur' }
           ],
            fileList1: [
             { required: true, message: '请上传身份证照片', trigger: 'change' }
@@ -175,128 +167,81 @@
       }
       // return false // (返回false不会自动上传)
     },
-handlePictureCardPreview1(file) {
-    this.dialogImageUrl1 = file.url
-     this.dialogVisible1 = true
-  },
-  handlePictureCardPreview2(file) {
-    this.dialogImageUrl2 = file.url
-     this.dialogVisible2 = true
-  },
-  handlePictureCardPreview3(file) {
-    this.dialogImageUrl3 = file.url
-     this.dialogVisible3 = true
-  },
-handleRemove1(file, fileList) {
-     this.aa=fileList
-      for(var i = 0; i < this.ruleForm.fileList1.length; i++){
-        if(this.ruleForm.fileList1[i].url === file.url){
-    //      deleteImageReport(this.fileList[i].id).then(res =>{
-     //       this.$message.success('删除图片成功')
-    //      })
-          this.ruleForm.fileList1.splice(i, 1)
+	// 上传文件之前的钩子
+			handleBeforeUpload1 (file) {
+				if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+					this.$notify.warning({
+						title: '警告',
+						message: '请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片'
+					})
+				}
+				let size = file.size / 1024 / 1024 / 2
+				if (size > 2) {
+					this.$notify.warning({
+						title: '警告',
+						message: '图片大小必须小于2M'
+					})
         }
-      }
-    },
-    handleRemove2(file, fileList) {
-     this.aa=fileList
-      for(var i = 0; i < this.ruleForm.fileList2.length; i++){
-        if(this.ruleForm.fileList2[i].url === file.url){
-    //      deleteImageReport(this.fileList[i].id).then(res =>{
-     //       this.$message.success('删除图片成功')
-    //      })
-          this.ruleForm.fileList2.splice(i, 1)
+        this.ruleForm.fileList1=file
+      },
+      			handleBeforeUpload2 (file) {
+				if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+					this.$notify.warning({
+						title: '警告',
+						message: '请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片'
+					})
+				}
+				let size = file.size / 1024 / 1024 / 2
+				if (size > 2) {
+					this.$notify.warning({
+						title: '警告',
+						message: '图片大小必须小于2M'
+					})
         }
-      }
-    },
-    handleRemove3(file, fileList) {
-     this.aa=fileList
-      for(var i = 0; i < this.ruleForm.fileList3.length; i++){
-        if(this.ruleForm.fileList3[i].url === file.url){
-    //      deleteImageReport(this.fileList[i].id).then(res =>{
-     //       this.$message.success('删除图片成功')
-    //      })
-          this.ruleForm.fileList3.splice(i, 1)
+        this.ruleForm.fileList2=file
+      },
+      			handleBeforeUpload3 (file) {
+				if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+					this.$notify.warning({
+						title: '警告',
+						message: '请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片'
+					})
+				}
+				let size = file.size / 1024 / 1024 / 2
+				if (size > 2) {
+					this.$notify.warning({
+						title: '警告',
+						message: '图片大小必须小于2M'
+					})
         }
-      }
-    },
-//上传图片
-    uploadImage1(image){
-      var that=this
-      this.$axios({
-      url:"/upload/pic",
-      method:"get",
-      params:{
-        img:image.file
-        }
-        }).then(res=>{
-          if(res.status==200){
-            if(res.data.status==0)
-             that.ruleForm.fileList1.push({name:"头像",url:res.data.url})
-            }
-            else
-            that.$message("上传失败")
-            })
-    },
-    //上传图片
-    uploadImage2(image){
-      var that=this
-      this.$axios({
-      url:"/upload/pic",
-      method:"get",
-      params:{
-        img:image.file
-        }
-        }).then(res=>{
-          if(res.status==200){
-            if(res.data.status==0)
-             that.ruleForm.fileList2.push({name:"头像",url:res.data.url})
-            }
-            else
-            that.$message("上传失败")
-            })
-    },
-    //上传图片
-    uploadImage3(image){
-      var that=this
-      this.$axios({
-      url:"/upload/pic",
-      method:"get",
-      params:{
-        img:image.file
-        }
-        }).then(res=>{
-          if(res.status==200){
-            if(res.data.status==0)
-             that.ruleForm.fileList3.push({name:"头像",url:res.data.url})
-            }
-            else
-            that.$message("上传失败")
-            })
-    },
-    handleExceed: function () {
-        this.$alert('请先删除选择的图片或视频，再上传  。最多上传一张', '提示', {
-            type: 'warning'
-        });
-    },
+        this.ruleForm.fileList3=file
+			},
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
              var that=this
+          
+             let img_per = new FormData();//通过form数据格式来传
+        img_per.append("img_per", that.ruleForm.fileList1); //传文件
+           let img_xue = new FormData();//通过form数据格式来传
+        img_xue.append("img_xue", that.ruleForm.fileList2); //传文件
+           let img_tea = new FormData();//通过form数据格式来传
+				img_tea.append("img_tea", that.ruleForm.fileList3); //传文件
           this.$axios({
             url:'/user/post_teacher',
             method:'POST',
              data: {
-               id:"123",
-               degree:parseInt(that.ruleForm.degree),
+               id:0,
+               degree:parseInt(that.ruleForm.region),
                graduate_school:that.ruleForm.graduate_school,
                teach_grade:parseInt(that.ruleForm.teach_grade),
                reason:that.ruleForm.reason,
-               img_per:that.ruleForm.fileList1[0].url,
-               img_xue:that.ruleForm.fileList2[1].url,
-               img_tea:that.ruleForm.fileList3[2].url, 
+               img_per,
+               img_xue,
+               img_tea, 
                }
           }).then(res=>{
+            console.log(res)
             if(res.status==200){
               if(res.data.status==0)
                 alert('提交成功')
@@ -310,6 +255,24 @@ handleRemove1(file, fileList) {
           }
         });
       },
+      imgChange1 (files, fileList) {
+				this.hideUpload = fileList.length >= this.limitNum;
+				if (fileList) {
+					this.$refs.uploadElement1.clearValidate();
+				}
+      },
+       imgChange2 (files, fileList) {
+				this.hideUpload = fileList.length >= this.limitNum;
+				if (fileList) {
+					this.$refs.uploadElement2.clearValidate();
+				}
+      },
+       imgChange3 (files, fileList) {
+				this.hideUpload = fileList.length >= this.limitNum;
+				if (fileList) {
+					this.$refs.uploadElement3.clearValidate();
+				}
+			},
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
