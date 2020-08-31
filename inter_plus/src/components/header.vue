@@ -33,7 +33,7 @@
           @command="handleCommand"
         >
           <span class="el-dropdown-link">
-            <el-avatar src="user_img"></el-avatar>
+            <el-avatar :src="user_img"></el-avatar>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="User">个人主页</el-dropdown-item>
@@ -147,6 +147,7 @@ export default {
             this.isAdmin = false
           }
           if(res.data.identity == 1){
+            this.isAdmin = false
             this.isTeacher = false
           }
           else if(res.data.identity == 0){
