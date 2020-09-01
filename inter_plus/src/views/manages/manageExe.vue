@@ -120,9 +120,9 @@
     },
     mounted(){
     this.$axios.post('',
-     this.qs.stringify({
+     {
         id:0
-      }),
+      },
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
       .then(res=>{
           if(res.status==200){

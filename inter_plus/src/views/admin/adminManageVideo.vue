@@ -15,6 +15,7 @@
         :data="data"
         show-checkbox
         node-key="id"
+        :expand-on-click-node="false"
         :filter-node-method="filterNode"
         :check-strictly="true"
         ref="tree">
@@ -25,6 +26,7 @@
               <el-button
                 icon="el-icon-search"
                 circle
+                v-if="node.level!==1"
                 @click="seeAll(node, data)">
               </el-button>
             </el-tooltip>
@@ -32,6 +34,7 @@
               <el-button
                 icon="el-icon-edit"
                 circle
+                v-if="node.level!==1&&node.level!==2"
                 @click="editAll(node, data)">
               </el-button>
             </el-tooltip>
@@ -40,6 +43,7 @@
               type="danger"
               icon="el-icon-delete"
               circle
+              v-if="node.level!==1"
               @click="() => remove(node, data)">
               </el-button>
             </el-tooltip>
@@ -67,7 +71,11 @@
             label: '三级 1-1-1'
           }, {
             id: 10,
-            label: '三级 1-1-2'
+            label: '三级 1-1-2',
+            children:[{
+              id: 11,
+              label:'四级 1-1-1-1'
+            }]
           }]
         }]
       }, {
@@ -110,7 +118,10 @@
     },
     methods: {
       loadNode(node, resolve){
-        if(node.level == 0){//在这里请求课程
+        if(node.level == 0){//在这里请求教师
+
+        }
+        else if(node.level == 1){//在这里请求课程
           this.$axios.post('/course/list', {author_id: localStorage.getItem('userId')}).then(res=>{
             if(res.status == 200){
               let treeData = []
@@ -128,7 +139,7 @@
           }).catch(e => {this.$message({message:e, type: 'error'})})
           //return resolve([{label: this.data[0].label}, {label: this.data[1].label}, {label:this.data[2].label}])
         }
-        else if(node.level == 1){//在这里请求课时
+        else if(node.level == 2){//在这里请求课时
           this.$axios.get('/course/info', {params:{id: node.data.id}}).then(res=>{
             if(res.status == 200){
               let sonData = []
@@ -144,14 +155,16 @@
               return resolve(sonData)
             }
           }).catch(e => {this.$message({message:e, type: 'error'})})
+        } else if(node.level === 3){//在这里请求视频，或者在课时的编辑弹窗中编辑视频
+
         }
       },
       seeAll(node, data){
-        if(node.level == 1){//删除和查看课程/编辑课程即展开课时
+        if(node.level == 2){//删除和查看课程/编辑课程即展开课时
           console.log('edit course'+data.id)
           this.$router.push({name: 'course_info', params: {courseId: data.id}})
         }
-        else if(node.level == 2){//删除、编辑和查看课时。
+        else if(node.level == 3){//删除、编辑和查看课时。
           console.log('edit single class => pop up dialogue for user to edit'+data.id)
           //这里需要请求课程详细信息，或许懒加载时已请求
           this.$router.push({name: 'classView', params: {courseId: node.parent.data.id, classId: data.id,
@@ -159,10 +172,10 @@
         }
       },
       editAll(node, data){
-        if(node.level == 1){//删除和查看课程/编辑课程即展开课时
+        if(node.level == 2){//删除和查看课程/编辑课程即展开课时
           console.log('edit course'+data.id)
         }
-        else if(node.level == 2){//删除、编辑和查看课时。
+        else if(node.level == 3){//删除、编辑和查看课时。
           console.log('edit single class => pop up dialogue for user to edit'+data.id)
           this.dialog = true
         }
@@ -171,6 +184,7 @@
         const parent = node.parent;
         const children = parent.data.children || parent.data;
         const index = children.findIndex(d => d.id === data.id);
+
         children.splice(index, 1);
       },
       filterNode(value, data) {

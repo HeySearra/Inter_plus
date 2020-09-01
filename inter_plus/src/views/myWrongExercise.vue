@@ -451,9 +451,9 @@ export default {
   ,
   mounted(){
          this.$axios.post('/course/user_list',
-     this.qs.stringify({
-        id:0
-      }),
+             {
+               id: 0
+             },
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
       .then(res=>{
         this.items=res.data.courses
@@ -468,9 +468,9 @@ export default {
        this.click = item.name;
        var that=this
           this.$axios.post('/exercise/post_wrong_exercise_file',
-     this.qs.stringify({
+     {
         course_id:item.id
-      }),
+      },
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(res=>{
             if(res.status==200){
               for(var i=0;i<res.data.questions.length;i++){

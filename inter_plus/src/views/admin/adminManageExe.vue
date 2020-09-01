@@ -109,10 +109,7 @@
       }
     },
     mounted(){
-    this.$axios.post('',
-     this.qs.stringify({
-      }),
-      {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+    this.$axios.post('')
       .then(res=>{
           if(res.status==200){
             console.log(res);
@@ -262,13 +259,12 @@
         }).then(res=>{
           if(res.status==200){
             console.log(res);
-            if(res.data.status==0) 
+            if(res.data.status==0)
             children.splice(index, 1);
             else
             that.$message("删除失败")
             }
             })
-       
       },
       filterNode(value, data) {
         if (!value) return true;
@@ -285,7 +281,7 @@
         datas.forEach(i =>{
           let node = this.$refs.tree.getNode(i)
           if(node.isLeaf&&node.level==4) 
-          this.remove(node, node.data)
+            this.remove(node, node.data)
         })
         this.resetChecked()
       },

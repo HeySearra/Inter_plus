@@ -1,6 +1,6 @@
 <template>
-  <el-dialog title="编辑课时" :visible.sync="dialogueVisible" center :before-close="handleClose">
-    在这里编辑课时的习题和视频。所以是否需要一个新的页面？
+  <div class="viewFile">
+    <el-dialog title="查看备课文件" :visible.sync="dialogueVisible" center :before-close="handleClose">
     <el-form :model="form">
       <el-form-item label="活动名称" :label-width="formLabelWidth">
         <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -17,11 +17,12 @@
       <el-button type="primary" @click="Submit">确 定</el-button>
     </div>
   </el-dialog>
+  </div>
 </template>
 
 <script>
   export default {
-    name: "editClass",
+    name: "viewFile",
     props:{
       dialog:{
         default: false

@@ -44,9 +44,9 @@ export default {
     ////复制 获取exerciselist
    ///获取课程id
         this.$axios.post('/course/user_list',
-     this.qs.stringify({
+     {
         id:0
-      }),
+      },
       {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
       .then(res=>{
           if(res.status==200){
